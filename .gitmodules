@@ -1,0 +1,3 @@
+[submodule "AUBIE-VEX-Core"]
+	path = AUBIE-VEX-Core
+	url = https://github.com/Auburn-Robotics-Club/AUBIE-VEX-Core.git

@@ -1,12 +1,10 @@
-﻿// VexSim.cpp : Defines the entry point for the application.
+// VexSim.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
-#include "VexSim.h"
+#include "AUBIE-VEX-Core/robotmath.h"
+#include <iostream>
 
-using namespace std;
-
-int main()
-{
-	cout << "Hello CMake!" << endl;
-	return 0;
+int main() {
+    Vector2d bob = Vector2d(5, 5);
+    std::cout << bob << std::endl;
 }
