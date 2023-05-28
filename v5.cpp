@@ -21,6 +21,10 @@ void encoder::updateEnc(simulator::RobotBase* robot, double deltaTime) {
 	revolutions += arc / (M_2PI*wheelRadius);
 }
 
+void motor::applyAcceleration(simulator::RobotBase* robot, double deltaTime) {
+
+};
+
 inertial::inertial() {
 
 };
@@ -106,8 +110,9 @@ void RobotBase::add(vex::inertial* inertialSensorIn) {
 }
 
 void RobotBase::updatePhysics(double deltaTime) {
-	//For motors update speed and physics
-	// - Depends on robot how it works so the vel will be set by robot type then this function will be called to update pos based on ab vel
+	for (unsigned int i = 0; i < motors.size(); i++) {
+		motors[i]->applyAcceleration(this, deltaTime);
+	}
 
 	center = vel * deltaTime + center;
 	heading += angularVel * deltaTime;
@@ -120,7 +125,7 @@ void RobotBase::updatePhysics(double deltaTime) {
 		encoders[i]->updateEnc(this, deltaTime);
 	}
 	for (unsigned int i = 0; i < motors.size(); i++) {
-		motors[i]->updateEnc(this, deltaTime); //Needs to take into account slipage
+		motors[i]->updateEnc(this, deltaTime); //TODO Needs to take into account slipage
 	}
 };
 

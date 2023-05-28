@@ -33,7 +33,7 @@ namespace simulator {
 		std::vector<vex::motor*> motors;
 		vex::inertial* inertialSensor = NULL;
 
-		void updatePhysics(double deltaTime); //Change Pos, Change facing vector
+		virtual void updatePhysics(double deltaTime); //Change Pos, Change facing vector
 	public:
 		RobotBase(Point2d startPos, double startHeadInDeg);
 		~RobotBase();
@@ -88,14 +88,22 @@ namespace vex {
 
 	class motor : public encoder {
 	protected:
-		const double MAX_POWER = 12; //Watts
+		const double MAX_POWER = 12.75; //Watts
+		const double STALL_TORQUE = 2.1; //Nm
+		const double MAX_PCT_ACCEL = 200; //Pct per second
+		const double K_TORQUE_RootPower = STALL_TORQUE / sqrtf(MAX_POWER);
+		const double TORQUE_LIMIT = 2;
+		const double SPEED_LIMIT_PERCENTAGE = 100;
 
-		double percentPower;
+		double percentPower = 0; //TODO Clamp between -1 and 1
+
+		double angularVelcoity; //PercentPower*MaxRPM in angular rotation
+
 	public:
 		motor(Vector2d offset, Vector2d rotation, double wheelRadiusIn) : encoder(offset, rotation, wheelRadiusIn) {};
 		//TODO Encoder wheel function when building speed needs to take into account slipage and slideing friction if vel is higher than roll speed
 
-		Vector2d getAcceleration(simulator::RobotBase* robot, double deltaTime);
+		void applyAcceleration(simulator::RobotBase* robot, double deltaTime);
 	};
 
 	class inertial {
