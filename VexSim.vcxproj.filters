@@ -33,6 +33,9 @@
     <ClCompile Include="v5.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="graphing.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="AUBIE-VEX-Core\.git" />
@@ -60,6 +63,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="v5_vcs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="graphing.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="matplotlibcpp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

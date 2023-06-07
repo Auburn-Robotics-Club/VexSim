@@ -3,9 +3,16 @@
 #include "AUBIE-VEX-Core/robotmath.h"
 #include <vector>
 #include <iostream>
+const double wheelRadius = 0.0762; //3 inches = 0.0762 meters
 
 namespace vex {
-	namespace rotationUnits {};
+	const enum rotationUnits {
+		deg,
+		rev
+	};
+	const enum velocityUnits {
+		pct,
+	};
 	class encoder;
 	class motor;
 	class inertial;
@@ -17,12 +24,9 @@ namespace simulator {
 
 	const double MU_STATIC = 0.8;
 	const double MU_KINETIC = 0.7;
-	const double g = 9.81; //M/s^2
 
 	class RobotBase {
 	protected:
-		double mass = 10; //Kg
-
 		Point2d center;
 		double heading;
 
@@ -57,18 +61,19 @@ namespace simulator {
 	};
 
 	class TankRobot : public RobotBase {
+	protected:
+		vex::motor* leftMotor;
+		vex::motor* rightMotor;
+		double width;
+
+		void updatePhysics(double deltaTime) override; //Change Pos, Change facing vector
 	public:
-		TankRobot(Point2d startPos, double startHeadInDeg, vex::motor* left, vex::motor* right);
+		TankRobot(Point2d startPos, double startHeadInDeg, vex::motor* left, vex::motor* right, double widthIn);
 	};
 }
 
 //Phycics and vex sim
 namespace vex {
-	namespace rotationUnits {
-		const int deg = 0;
-		const int rev = 1;
-	}
-
 	class encoder {
 	protected:
 		Vector2d offsetFromCenter;
@@ -82,28 +87,33 @@ namespace vex {
 	public:
 		encoder(Vector2d offset, Vector2d rotation, double wheelRadiusIn);
 
-		void setPosition(double p, int rotUnits = vex::rotationUnits::rev);
-		double position(int rotUnits = vex::rotationUnits::rev);
+		void setPosition(double p, vex::rotationUnits rotUnits = vex::rotationUnits::rev);
+		double position(vex::rotationUnits rotUnits = vex::rotationUnits::rev);
 	};
 
 	class motor : public encoder {
 	protected:
-		const double MAX_POWER = 12.75; //Watts
-		const double STALL_TORQUE = 2.1; //Nm
-		const double MAX_PCT_ACCEL = 200; //Pct per second
-		const double K_TORQUE_RootPower = STALL_TORQUE / sqrtf(MAX_POWER);
-		const double TORQUE_LIMIT = 2;
-		const double SPEED_LIMIT_PERCENTAGE = 100;
+		//const double MAX_POWER = 12.75; //Watts
+		//const double STALL_TORQUE = 2.1; //Nm
+		//const double K_TORQUE_RootPower = STALL_TORQUE / sqrtf(MAX_POWER);
+		//const double TORQUE_LIMIT = 2;
+
+		const double MAX_PCT_ACCEL = 200.00; //Pct per second
+		const double MAX_ANGULAR_SPEED = 1 / wheelRadius;
+		friend simulator::RobotBase;
+		friend simulator::TankRobot;
 
 		double percentPower = 0; //TODO Clamp between -1 and 1
+		double setPower = 0; //Clamp between -1 and 1
 
-		double angularVelcoity; //PercentPower*MaxRPM in angular rotation
-
+		void updatePhysics(simulator::RobotBase* robot, double deltaTime);
+		double getAngularSpeed();
 	public:
 		motor(Vector2d offset, Vector2d rotation, double wheelRadiusIn) : encoder(offset, rotation, wheelRadiusIn) {};
 		//TODO Encoder wheel function when building speed needs to take into account slipage and slideing friction if vel is higher than roll speed
 
-		void applyAcceleration(simulator::RobotBase* robot, double deltaTime);
+		void setVelocity(double value, vex::velocityUnits units = vex::velocityUnits::pct);
+		double velocity(vex::velocityUnits units = vex::velocityUnits::pct);
 	};
 
 	class inertial {
@@ -118,7 +128,7 @@ namespace vex {
 
 		bool installed();
 		double angle();
-		void setRotation(double in, int type = vex::rotationUnits::deg);
+		void setRotation(double in, vex::rotationUnits type = vex::rotationUnits::deg);
 	};
 }
 #endif

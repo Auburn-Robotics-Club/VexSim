@@ -9,6 +9,8 @@ Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
+		PythonInc|x64 = PythonInc|x64
+		PythonInc|x86 = PythonInc|x86
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
@@ -17,6 +19,10 @@ Global
 		{C359B3E9-C354-4300-A9ED-DBC3DF0CBC0E}.Debug|x64.Build.0 = Debug|x64
 		{C359B3E9-C354-4300-A9ED-DBC3DF0CBC0E}.Debug|x86.ActiveCfg = Debug|Win32
 		{C359B3E9-C354-4300-A9ED-DBC3DF0CBC0E}.Debug|x86.Build.0 = Debug|Win32
+		{C359B3E9-C354-4300-A9ED-DBC3DF0CBC0E}.PythonInc|x64.ActiveCfg = PythonInc|x64
+		{C359B3E9-C354-4300-A9ED-DBC3DF0CBC0E}.PythonInc|x64.Build.0 = PythonInc|x64
+		{C359B3E9-C354-4300-A9ED-DBC3DF0CBC0E}.PythonInc|x86.ActiveCfg = PythonInc|Win32
+		{C359B3E9-C354-4300-A9ED-DBC3DF0CBC0E}.PythonInc|x86.Build.0 = PythonInc|Win32
 		{C359B3E9-C354-4300-A9ED-DBC3DF0CBC0E}.Release|x64.ActiveCfg = Release|x64
 		{C359B3E9-C354-4300-A9ED-DBC3DF0CBC0E}.Release|x64.Build.0 = Release|x64
 		{C359B3E9-C354-4300-A9ED-DBC3DF0CBC0E}.Release|x86.ActiveCfg = Release|Win32

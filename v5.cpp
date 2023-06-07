@@ -8,11 +8,11 @@ encoder::encoder(Vector2d offset, Vector2d rotation, double wheelRadiusIn) {
 	wheelRadius = wheelRadiusIn;
 }
 
-void encoder::setPosition(double p, int rotUnits) {
+void encoder::setPosition(double p, vex::rotationUnits rotUnits) {
 	revolutions = p;
 }
 
-double encoder::position(int rotUnits) {
+double encoder::position(vex::rotationUnits rotUnits) {
 	return revolutions;
 }
 
@@ -21,8 +21,25 @@ void encoder::updateEnc(simulator::RobotBase* robot, double deltaTime) {
 	revolutions += arc / (M_2PI*wheelRadius);
 }
 
-void motor::applyAcceleration(simulator::RobotBase* robot, double deltaTime) {
+void motor::updatePhysics(simulator::RobotBase* robot, double deltaTime) {
+	double delta = setPower - percentPower;
+	if (abs(delta / deltaTime) > MAX_PCT_ACCEL) {
+		delta = sign(delta) * MAX_PCT_ACCEL * deltaTime;
+	}
+	percentPower += delta;
+	percentPower = fclamp(percentPower, -1, 1);
+};
 
+void motor::setVelocity(double value, vex::velocityUnits units) {
+	setPower = fclamp(value / 100, -1, 1);
+};
+
+double motor::velocity(vex::velocityUnits units) {
+	return percentPower * 100;
+};
+
+double motor::getAngularSpeed() {
+	return percentPower* MAX_ANGULAR_SPEED;
 };
 
 inertial::inertial() {
@@ -41,7 +58,7 @@ double inertial::angle() {
 	return CWAngle;
 }
 
-void inertial::setRotation(double in, int type) {
+void inertial::setRotation(double in, vex::rotationUnits type) {
 	CWAngle = in;
 }
 
@@ -111,12 +128,12 @@ void RobotBase::add(vex::inertial* inertialSensorIn) {
 
 void RobotBase::updatePhysics(double deltaTime) {
 	for (unsigned int i = 0; i < motors.size(); i++) {
-		motors[i]->applyAcceleration(this, deltaTime);
+		motors[i]->updatePhysics(this, deltaTime);
 	}
 
 	center = vel * deltaTime + center;
 	heading += angularVel * deltaTime;
-	heading = normalizeAngle(heading);
+	heading = heading;
 
 	if (inertialSensor != NULL) {
 		inertialSensor->update(this, deltaTime);
@@ -137,8 +154,17 @@ void RobotBase::update(int msecs) {
 	}
 };
 
-TankRobot::TankRobot(Point2d startPos, double startHeadInDeg, vex::motor* left, vex::motor* right) :
+TankRobot::TankRobot(Point2d startPos, double startHeadInDeg, vex::motor* left, vex::motor* right, double widthIn) :
 	RobotBase(startPos, startHeadInDeg) {
 	add(left);
 	add(right);
+	leftMotor = left;
+	rightMotor = right;
+	width = widthIn;
+};
+
+void TankRobot::updatePhysics(double deltaTime) {
+	vel = Vector2d(0.5 * (leftMotor->getAngularSpeed() + rightMotor->getAngularSpeed()) * wheelRadius, heading, false);
+	angularVel = (rightMotor->getAngularSpeed() - leftMotor->getAngularSpeed()) * wheelRadius / width;
+	RobotBase::updatePhysics(deltaTime);
 };
