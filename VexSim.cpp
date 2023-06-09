@@ -16,10 +16,12 @@ vex::inertial inertialSensor = vex::inertial();
 //Simulator setup
 const int SIM_TIME = 10000; //Msec
 
-
 //TODO Speed Heatmap for testing on curves
-
 int main() {
+    plt::Image image = plt::Image("./Field2022.png");
+    image.display();
+
+    /*
     simulator::TankRobot realRobot = simulator::TankRobot(startPos.currentPosition, startPos.currentHeading, &leftM, &rightM, tankWidth);
     realRobot.add(&horE);
     realRobot.add(&inertialSensor);
@@ -87,6 +89,6 @@ int main() {
     std::cout << "SIMULATED: " << realRobot.getCenter() << ", " << radToDeg(realRobot.getHeading()) << std::endl;
     std::cout << "NAV: " << trackingBasePos << ", " << radToDeg(trackBase.getHeading()) << std::endl;
     std::cout << "ENCODERS: " << leftM.position() * (M_2PI * wheelRadius) << ", " << rightM.position() * (M_2PI * wheelRadius) << std::endl;
-
+    */
     plt::show();
 }

@@ -25,6 +25,23 @@ namespace matplotlibcpp {
 	void quiver(Path& path, double mag = 1, std::string color = "black");
 
 	void drawField();
+
+	class Image {
+	private:
+		PyObject* numpyImagePointer;
+	public:
+		Image(std::string path) {
+			numpyImagePointer = matplotlibcpp::getImage(path);
+		};
+
+		~Image() {
+			Py_DECREF(numpyImagePointer);
+		};
+
+		void display() {
+			matplotlibcpp::displayImage(numpyImagePointer);
+		}
+	};
 }
 
 namespace plt = matplotlibcpp;

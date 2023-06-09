@@ -103,6 +103,9 @@ struct _interpreter {
     PyObject *s_python_function_subplots_adjust;
     PyObject *s_python_function_rcparams;
     PyObject *s_python_function_spy;
+    PyObject *s_python_function_Image;
+    PyObject *s_python_function_ImageOpen;
+    PyObject *s_python_function_asNPArray;
 
     /* For now, _interpreter is implemented as a singleton since its currently not possible to have
        multiple independent embedded python interpreters without patching the python source code
@@ -210,7 +213,15 @@ private:
             PyObject_CallMethod(matplotlib, const_cast<char*>("use"), const_cast<char*>("s"), s_backend.c_str());
         }
 
+#ifndef WITHOUT_NUMPY
+        PyObject* pilname = PyString_FromString("PIL");
+        PyObject* PIL = PyImport_Import(pilname);
+        Py_DECREF(pilname);
 
+        PyObject* npmodname = PyString_FromString("numpy");
+        PyObject* npmod = PyImport_Import(npmodname);
+        Py_DECREF(npmodname);
+#endif
 
         PyObject* pymod = PyImport_Import(pyplotname);
         Py_DECREF(pyplotname);
@@ -277,9 +288,12 @@ private:
         s_python_function_colorbar = PyObject_GetAttrString(pymod, "colorbar");
         s_python_function_subplots_adjust = safe_import(pymod,"subplots_adjust");
         s_python_function_rcparams = PyObject_GetAttrString(pymod, "rcParams");
-	s_python_function_spy = PyObject_GetAttrString(pymod, "spy");
+	    s_python_function_spy = PyObject_GetAttrString(pymod, "spy");
 #ifndef WITHOUT_NUMPY
         s_python_function_imshow = safe_import(pymod, "imshow");
+        s_python_function_Image = PyObject_GetAttrString(PIL, "Image");
+        s_python_function_ImageOpen = PyObject_GetAttrString(s_python_function_Image, "open");
+        s_python_function_asNPArray = PyObject_GetAttrString(npmod, "asarray");
 #endif
         s_python_empty_tuple = PyTuple_New(0);
     }
@@ -946,6 +960,43 @@ inline void imshow(void *ptr, const NPY_TYPES type, const int rows, const int co
 }
 
 } // namespace detail
+
+inline PyObject* getImage(std::string path) {
+    //s_python_function_Image
+    detail::_interpreter::get();
+    
+    PyObject* args = PyTuple_New(1);
+    PyTuple_SetItem(args, 0, PyString_FromString(path.c_str()));
+
+    PyObject* res = PyObject_CallObject(detail::_interpreter::get().s_python_function_ImageOpen, args);
+    if (!res) throw std::runtime_error("Call to getImage() failed.");
+
+    Py_DECREF(args);
+
+    args = PyTuple_New(1);
+    PyTuple_SetItem(args, 0, res);
+
+    res = PyObject_CallObject(detail::_interpreter::get().s_python_function_asNPArray, args);
+    if (!res) throw std::runtime_error("Call to getImage() failed.");
+
+    Py_DECREF(args);
+
+    return res;
+    //return nullptr;
+}
+
+inline void displayImage(PyObject* image) {
+    //s_python_function_Image
+    detail::_interpreter::get();
+
+    PyObject* args = PyTuple_New(1);
+    PyTuple_SetItem(args, 0, image);
+
+    PyObject* res = PyObject_CallObject(detail::_interpreter::get().s_python_function_imshow, args);
+    if (!res) throw std::runtime_error("Call to displayImage() failed.");
+
+    Py_DECREF(args);
+}
 
 inline void imshow(const unsigned char *ptr, const int rows, const int columns, const int colors, const std::map<std::string, std::string> &keywords = {}, PyObject** out = nullptr)
 {
