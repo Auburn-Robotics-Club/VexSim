@@ -5,6 +5,9 @@
 #include <iostream>
 const double wheelRadius = 0.0762; //3 inches = 0.0762 meters
 
+//TODO GPS; Returns postion +- noise
+////Can be used to test kalman and various filter implementation
+
 namespace vex {
 	const enum rotationUnits {
 		deg,
