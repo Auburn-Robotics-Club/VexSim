@@ -3,7 +3,7 @@
 #include "AUBIE-VEX-Core/robotmath.h"
 #include <vector>
 #include <iostream>
-const double wheelRadius = 0.0762; //3 inches = 0.0762 meters
+const double wheelRadius = 3; //Inches
 
 //TODO GPS; Returns postion +- noise
 ////Can be used to test kalman and various filter implementation
@@ -24,9 +24,6 @@ namespace vex {
 namespace simulator {
 	const int cyclesPerMsec = 10;
 	const double timeStep = 0.001 / cyclesPerMsec;
-
-	const double MU_STATIC = 0.8;
-	const double MU_KINETIC = 0.7;
 
 	class RobotBase {
 	protected:
@@ -96,13 +93,8 @@ namespace vex {
 
 	class motor : public encoder {
 	protected:
-		//const double MAX_POWER = 12.75; //Watts
-		//const double STALL_TORQUE = 2.1; //Nm
-		//const double K_TORQUE_RootPower = STALL_TORQUE / sqrtf(MAX_POWER);
-		//const double TORQUE_LIMIT = 2;
-
 		const double MAX_PCT_ACCEL = 200.00; //Pct per second
-		const double MAX_ANGULAR_SPEED = 1 / wheelRadius;
+		const double MAX_ANGULAR_SPEED = 40 / wheelRadius;
 		friend simulator::RobotBase;
 		friend simulator::TankRobot;
 

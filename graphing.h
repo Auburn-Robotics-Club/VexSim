@@ -6,6 +6,9 @@
 
 extern double DOT_SIZE;
 
+//TODO
+	//plt::plot(x, y, {{"color", "red"}, {"marker": "o"}, {"linestyle": "--"}})
+
 namespace matplotlibcpp {
 	void scatter(Point2d p, std::string color = "black");
 	void quiver(Point2d p, Vector2d v, std::string color = "black");
@@ -24,25 +27,25 @@ namespace matplotlibcpp {
 	void scatter(Path& path, std::string color = "black");
 	void quiver(Path& path, double mag = 1, std::string color = "black");
 
-	void drawField();
-
 	class Image {
 	private:
 		PyObject* numpyImagePointer;
+		int XSIZE;
+		int YSIZE;
+
+		PyObject* args = nullptr;
+
 	public:
-		Image(std::string path) {
-			numpyImagePointer = matplotlibcpp::getImage(path);
-		};
+		Image(std::string path, int xSizeNew, int ySizeNew);
+		~Image();
+		void display();
 
-		~Image() {
-			Py_DECREF(numpyImagePointer);
-		};
-
-		void display() {
-			matplotlibcpp::displayImage(numpyImagePointer);
-		}
+		int xSize();
+		int ySize();
 	};
+
+	extern Image fieldImage;
+	void drawField();
 }
 
 namespace plt = matplotlibcpp;
-

@@ -961,7 +961,8 @@ inline void imshow(void *ptr, const NPY_TYPES type, const int rows, const int co
 
 } // namespace detail
 
-inline PyObject* getImage(std::string path) {
+//getImage = np.asarray(Image.open(path).resize((np.array([xSizeNew, ySizeNew])).astype(int)))
+inline PyObject* getImage(std::string path, int xSizeNew, int ySizeNew) {
     //s_python_function_Image
     detail::_interpreter::get();
     
@@ -970,32 +971,24 @@ inline PyObject* getImage(std::string path) {
 
     PyObject* res = PyObject_CallObject(detail::_interpreter::get().s_python_function_ImageOpen, args);
     if (!res) throw std::runtime_error("Call to getImage() failed.");
+    Py_DECREF(args);
 
+    PyObject* sizeArr = detail::get_array<int>({ xSizeNew, ySizeNew });
+    args = PyTuple_New(1);
+    PyTuple_SetItem(args, 0, sizeArr);
+    
+    
+    PyObject* resizeF = PyObject_GetAttrString(res, "resize");
+    res = PyObject_CallObject(resizeF, args);
     Py_DECREF(args);
 
     args = PyTuple_New(1);
     PyTuple_SetItem(args, 0, res);
-
     res = PyObject_CallObject(detail::_interpreter::get().s_python_function_asNPArray, args);
     if (!res) throw std::runtime_error("Call to getImage() failed.");
-
     Py_DECREF(args);
 
     return res;
-    //return nullptr;
-}
-
-inline void displayImage(PyObject* image) {
-    //s_python_function_Image
-    detail::_interpreter::get();
-
-    PyObject* args = PyTuple_New(1);
-    PyTuple_SetItem(args, 0, image);
-
-    PyObject* res = PyObject_CallObject(detail::_interpreter::get().s_python_function_imshow, args);
-    if (!res) throw std::runtime_error("Call to displayImage() failed.");
-
-    Py_DECREF(args);
 }
 
 inline void imshow(const unsigned char *ptr, const int rows, const int columns, const int colors, const std::map<std::string, std::string> &keywords = {}, PyObject** out = nullptr)
@@ -2669,8 +2662,8 @@ inline void pause(Numeric interval)
     PyObject* res = PyObject_CallObject(detail::_interpreter::get().s_python_function_pause, args);
     if(!res) throw std::runtime_error("Call to pause() failed.");
 
-    Py_DECREF(args);
-    Py_DECREF(res);
+    Py_CLEAR(args);
+    Py_CLEAR(res);
 }
 
 inline void save(const std::string& filename, const int dpi=0)
