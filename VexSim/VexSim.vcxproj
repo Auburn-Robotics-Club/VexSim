@@ -70,6 +70,10 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>D:\Projects\AUBIE VEX\VexSim\AUBIE-VEX-Core;D:\Projects\AUBIE VEX\VexSim\SFML-2.5.1\include;D:\Projects\AUBIE VEX\VexSim\Simulator;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\Projects\AUBIE VEX\VexSim\SFML-2.5.1\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -108,6 +112,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -127,7 +132,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="VexSim.cpp" />
+    <ClCompile Include="..\AUBIE-VEX-Core\src\logger.cpp" />
+    <ClCompile Include="..\AUBIE-VEX-Core\src\navigation.cpp" />
+    <ClCompile Include="..\AUBIE-VEX-Core\src\robotmath.cpp" />
+    <ClCompile Include="..\Simulator\src\v5.cpp" />
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Assets\Field2022.png" />
+    <Image Include="..\Assets\tank.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\AUBIE-VEX-Core\gui.h" />
+    <ClInclude Include="..\AUBIE-VEX-Core\logger.h" />
+    <ClInclude Include="..\AUBIE-VEX-Core\navigation.h" />
+    <ClInclude Include="..\AUBIE-VEX-Core\quickguide.h" />
+    <ClInclude Include="..\AUBIE-VEX-Core\robotmath.h" />
+    <ClInclude Include="..\AUBIE-VEX-Core\robotModels.h" />
+    <ClInclude Include="..\Simulator\v5.h" />
+    <ClInclude Include="..\Simulator\v5_vcs.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
