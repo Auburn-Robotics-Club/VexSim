@@ -56,6 +56,9 @@
     <Image Include="..\Assets\tank.png">
       <Filter>Resource Files\Assets</Filter>
     </Image>
+    <Image Include="..\Assets\Field2023.png">
+      <Filter>Resource Files\Assets</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\AUBIE-VEX-Core\gui.h">

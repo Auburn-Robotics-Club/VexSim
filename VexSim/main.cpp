@@ -23,7 +23,7 @@ int main() {
     realRobot.add(&inertialSensor);
 
     //Visuals
-    simulator::Field field(floor(simulator::WINDOW_HEIGHT * 1), "Field2022.png");
+    simulator::Field field(floor(simulator::WINDOW_HEIGHT * 1), "Field2023.png");
     simulator::RobotSprite robotSprite(&realRobot, "tank.png", field);
 
     int t = 0;

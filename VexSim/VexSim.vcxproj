@@ -141,6 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\Assets\Field2022.png" />
+    <Image Include="..\Assets\Field2023.png" />
     <Image Include="..\Assets\tank.png" />
   </ItemGroup>
   <ItemGroup>
