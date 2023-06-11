@@ -33,13 +33,17 @@ namespace simulator {
 		Vector2d vel = Vector2d(0, 0); //Meters per second in abs frame
 		double angularVel = 0;
 
+		double widthInches;
+		double heightInches;
+
+
 		std::vector<vex::encoder*> encoders;
 		std::vector<vex::motor*> motors;
 		vex::inertial* inertialSensor = NULL;
 
 		virtual void updatePhysics(double deltaTime); //Change Pos, Change facing vector
 	public:
-		RobotBase(Point2d startPos, double startHeadInDeg);
+		RobotBase(Point2d startPos, double startHeadInDeg, double width, double height);
 		~RobotBase();
 
 		Point2d getCenter();
@@ -48,6 +52,7 @@ namespace simulator {
 		Vector2d getFacingVector();
 		Vector2d getAbsVel();
 		Vector2d getRealitiveVel();
+		Vector2d size();
 		void setAbsVel(Vector2d newVel);
 		void setRealitiveVel(Vector2d newVel);
 		void setAngularVel(double newAngVel);
@@ -64,11 +69,11 @@ namespace simulator {
 	protected:
 		vex::motor* leftMotor;
 		vex::motor* rightMotor;
-		double width;
+		double wheelWidth;
 
 		void updatePhysics(double deltaTime) override; //Change Pos, Change facing vector
 	public:
-		TankRobot(Point2d startPos, double startHeadInDeg, vex::motor* left, vex::motor* right, double widthIn);
+		TankRobot(Point2d startPos, double startHeadInDeg, vex::motor* left, vex::motor* right, double wheelWidthIn, double widthInchesIn, double heightInchesIn);
 	};
 }
 

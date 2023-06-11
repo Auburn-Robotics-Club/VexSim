@@ -64,9 +64,11 @@ void inertial::setRotation(double in, vex::rotationUnits type) {
 
 using namespace simulator;
 
-RobotBase::RobotBase(Point2d startPos, double startHeadInDeg) {
+RobotBase::RobotBase(Point2d startPos, double startHeadInDeg, double widthInchesIn, double heightInchesIn) {
 	center = startPos;
 	heading = normalizeAngle(degToRad(startHeadInDeg));
+	widthInches = widthInchesIn;
+	heightInches = heightInchesIn;
 };
 
 RobotBase::~RobotBase() {
@@ -97,6 +99,10 @@ Vector2d RobotBase::getAbsVel() {
 Vector2d RobotBase::getRealitiveVel() {
 	return vel.getRotatedVector(M_PI_2 - getHeading(), false);
 }
+
+Vector2d RobotBase::size() {
+	return Vector2d(widthInches, heightInches);
+};
 
 void RobotBase::setAbsVel(Vector2d newVel) {
 	vel = newVel;
@@ -154,17 +160,17 @@ void RobotBase::update(int msecs) {
 	}
 };
 
-TankRobot::TankRobot(Point2d startPos, double startHeadInDeg, vex::motor* left, vex::motor* right, double widthIn) :
-	RobotBase(startPos, startHeadInDeg) {
+TankRobot::TankRobot(Point2d startPos, double startHeadInDeg, vex::motor* left, vex::motor* right, double wheelWidthIn, double widthInchesIn, double heightInchesIn) :
+	RobotBase(startPos, startHeadInDeg, widthInchesIn, heightInchesIn) {
 	add(left);
 	add(right);
 	leftMotor = left;
 	rightMotor = right;
-	width = widthIn;
+	wheelWidth = wheelWidthIn;
 };
 
 void TankRobot::updatePhysics(double deltaTime) {
 	vel = Vector2d(0.5 * (leftMotor->getAngularSpeed() + rightMotor->getAngularSpeed()) * wheelRadius, heading, false);
-	angularVel = (rightMotor->getAngularSpeed() - leftMotor->getAngularSpeed()) * wheelRadius / width;
+	angularVel = (rightMotor->getAngularSpeed() - leftMotor->getAngularSpeed()) * wheelRadius / wheelWidth;
 	RobotBase::updatePhysics(deltaTime);
 };

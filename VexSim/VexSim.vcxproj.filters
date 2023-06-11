@@ -45,6 +45,9 @@
     <ClCompile Include="..\AUBIE-VEX-Core\src\robotmath.cpp">
       <Filter>Source Files\VEX-AUBIE-CORE</Filter>
     </ClCompile>
+    <ClCompile Include="..\Simulator\src\BaseGUI.cpp">
+      <Filter>Source Files\Simulator</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\Assets\Field2022.png">
@@ -77,6 +80,9 @@
       <Filter>Header Files\Simulator</Filter>
     </ClInclude>
     <ClInclude Include="..\Simulator\v5_vcs.h">
+      <Filter>Header Files\Simulator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Simulator\BaseGUI.h">
       <Filter>Header Files\Simulator</Filter>
     </ClInclude>
   </ItemGroup>
