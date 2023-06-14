@@ -48,6 +48,9 @@
     <ClCompile Include="..\Simulator\src\BaseGUI.cpp">
       <Filter>Source Files\Simulator</Filter>
     </ClCompile>
+    <ClCompile Include="..\Simulator\src\Line.cpp">
+      <Filter>Source Files\Simulator</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\Assets\Field2022.png">
@@ -86,6 +89,12 @@
       <Filter>Header Files\Simulator</Filter>
     </ClInclude>
     <ClInclude Include="..\Simulator\BaseGUI.h">
+      <Filter>Header Files\Simulator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Simulator\Common.hpp">
+      <Filter>Header Files\Simulator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Simulator\Line.hpp">
       <Filter>Header Files\Simulator</Filter>
     </ClInclude>
   </ItemGroup>
