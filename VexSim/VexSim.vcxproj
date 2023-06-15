@@ -71,8 +71,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>D:\Projects\AUBIE VEX\VexSim\AUBIE-VEX-Core;D:\Projects\AUBIE VEX\VexSim\SFML-2.5.1\include;D:\Projects\AUBIE VEX\VexSim\Simulator;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\Projects\AUBIE VEX\VexSim\SFML-2.5.1\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\AUBIE-VEX-Core;$(SolutionDir)\SFML-2.5.1\include;$(SolutionDir)\Simulator;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\SFML-2.5.1\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
