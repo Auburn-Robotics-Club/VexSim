@@ -9,11 +9,21 @@ encoder::encoder(Vector2d offset, Vector2d rotation, double wheelRadiusIn) {
 }
 
 void encoder::setPosition(double p, vex::rotationUnits rotUnits) {
-	revolutions = p;
+	if (rotUnits == vex::rotationUnits::rev) {
+		revolutions = p;
+	}
+	else if (rotUnits == vex::rotationUnits::deg) {
+		revolutions = p / 360.0;
+	}
 }
 
 double encoder::position(vex::rotationUnits rotUnits) {
-	return revolutions;
+	if (rotUnits == vex::rotationUnits::rev) {
+		return revolutions;
+	}
+	else if (rotUnits == vex::rotationUnits::deg) {
+		return revolutions * 360.0;
+	}
 }
 
 void encoder::updateEnc(simulator::RobotBase* robot, double deltaTime) {
@@ -23,19 +33,43 @@ void encoder::updateEnc(simulator::RobotBase* robot, double deltaTime) {
 
 void motor::updatePhysics(simulator::RobotBase* robot, double deltaTime) {
 	double delta = setPower - percentPower;
-	if (abs(delta / deltaTime) > MAX_PCT_ACCEL) {
-		delta = sign(delta) * MAX_PCT_ACCEL * deltaTime;
+	if (abs(delta / deltaTime) > simulator::MAX_PCT_ACCEL) {
+		delta = sign(delta) * simulator::MAX_PCT_ACCEL * deltaTime;
 	}
 	percentPower += delta;
 	percentPower = fclamp(percentPower, -1, 1);
 };
 
 void motor::setVelocity(double value, vex::velocityUnits units) {
-	setPower = fclamp(value / 100, -1, 1);
+	if (units == vex::velocityUnits::pct) {
+		setPower = fclamp(value / 100, -1, 1);
+	}
+	else if (units == vex::velocityUnits::dps) {
+		setPower = fclamp(degToRad(value) / MAX_ANGULAR_SPEED, -1, 1);
+	}
+	else if (units == vex::velocityUnits::rpm) {
+		setPower = fclamp(degToRad(value * 6) / MAX_ANGULAR_SPEED, -1, 1);
+	}
+};
+
+void motor::setVelocity(double value, vex::percentUnits units) {
+	setVelocity(value, vex::velocityUnits::pct);
 };
 
 double motor::velocity(vex::velocityUnits units) {
-	return percentPower * 100;
+	if (units == vex::velocityUnits::pct) {
+		return percentPower * 100;
+	}
+	else if (units == vex::velocityUnits::dps) {
+		return radToDeg(setPower* MAX_ANGULAR_SPEED);
+	}
+	else if (units == vex::velocityUnits::rpm) {
+		return radToDeg(setPower * MAX_ANGULAR_SPEED) / 6.0;
+	}
+};
+
+double motor::velocity(vex::percentUnits units) {
+	return velocity(vex::velocityUnits::pct);
 };
 
 double motor::getAngularSpeed() {
@@ -59,7 +93,12 @@ double inertial::angle() {
 }
 
 void inertial::setRotation(double in, vex::rotationUnits type) {
-	CWAngle = in;
+	if (type == vex::rotationUnits::deg){
+		CWAngle = in;
+	}
+	else if (type == vex::rotationUnits::rev) {
+		CWAngle = in * 360;
+	}
 }
 
 using namespace simulator;
@@ -137,9 +176,13 @@ void RobotBase::updatePhysics(double deltaTime) {
 		motors[i]->updatePhysics(this, deltaTime);
 	}
 
+	//TODO Apply external phycics here
+
 	center = vel * deltaTime + center;
 	heading += angularVel * deltaTime;
 	heading = heading;
+
+	//End apply external phycics
 
 	if (inertialSensor != NULL) {
 		inertialSensor->update(this, deltaTime);

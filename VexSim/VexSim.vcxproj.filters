@@ -51,6 +51,9 @@
     <ClCompile Include="..\Simulator\src\Line.cpp">
       <Filter>Source Files\Simulator</Filter>
     </ClCompile>
+    <ClCompile Include="simulator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\Assets\Field2022.png">
@@ -96,6 +99,9 @@
     </ClInclude>
     <ClInclude Include="..\Simulator\Line.hpp">
       <Filter>Header Files\Simulator</Filter>
+    </ClInclude>
+    <ClInclude Include="simulator.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

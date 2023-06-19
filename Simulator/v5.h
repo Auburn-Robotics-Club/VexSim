@@ -3,34 +3,41 @@
 #include "robotmath.h"
 #include <vector>
 #include <iostream>
-const double wheelRadius = 3; //Inches
-
-//TODO GPS; Returns postion +- noise
-////Can be used to test kalman and various filter implementation
-
-namespace vex {
-	const enum rotationUnits {
-		deg,
-		rev
-	};
-	const enum velocityUnits {
-		pct,
-	};
-	class encoder;
-	class motor;
-	class inertial;
-};
 
 namespace simulator {
 	const int cyclesPerMsec = 10;
 	const double timeStep = 0.001 / cyclesPerMsec;
+	const double wheelRadius = 3; //Inches
+	const double MAX_SPEED = 40; //Inches per second
+	const double MAX_PCT_ACCEL = 200.00; //Pct per second
+}
+
+namespace vex {
+	const enum class rotationUnits {
+		deg,
+		rev
+	};
+	const enum class velocityUnits {
+		pct,
+		dps,
+		rpm
+	};
+	const enum class percentUnits {
+		pct
+	};
+	class encoder;
+	class motor;
+	class inertial;
+}
+
+namespace simulator {
 
 	class RobotBase {
 	protected:
 		Point2d center;
 		double heading;
 
-		Vector2d vel = Vector2d(0, 0); //Meters per second in abs frame
+		Vector2d vel = Vector2d(0, 0); //Speed in abs frame
 		double angularVel = 0;
 
 		double widthInches;
@@ -92,28 +99,28 @@ namespace vex {
 	public:
 		encoder(Vector2d offset, Vector2d rotation, double wheelRadiusIn);
 
-		void setPosition(double p, vex::rotationUnits rotUnits = vex::rotationUnits::rev);
-		double position(vex::rotationUnits rotUnits = vex::rotationUnits::rev);
+		void setPosition(double p, vex::rotationUnits rotUnits);
+		double position(vex::rotationUnits rotUnits);
 	};
 
 	class motor : public encoder {
 	protected:
-		const double MAX_PCT_ACCEL = 200.00; //Pct per second
-		const double MAX_ANGULAR_SPEED = 40 / wheelRadius;
+		const double MAX_ANGULAR_SPEED = simulator::MAX_SPEED / wheelRadius;
 		friend simulator::RobotBase;
 		friend simulator::TankRobot;
 
-		double percentPower = 0; //TODO Clamp between -1 and 1
+		double percentPower = 0; //Clamp between -1 and 1
 		double setPower = 0; //Clamp between -1 and 1
 
 		void updatePhysics(simulator::RobotBase* robot, double deltaTime);
 		double getAngularSpeed();
 	public:
 		motor(Vector2d offset, Vector2d rotation, double wheelRadiusIn) : encoder(offset, rotation, wheelRadiusIn) {};
-		//TODO Encoder wheel function when building speed needs to take into account slipage and slideing friction if vel is higher than roll speed
 
-		void setVelocity(double value, vex::velocityUnits units = vex::velocityUnits::pct);
-		double velocity(vex::velocityUnits units = vex::velocityUnits::pct);
+		void setVelocity(double value, vex::velocityUnits units);
+		void setVelocity(double value, vex::percentUnits units);
+		double velocity(vex::velocityUnits units);
+		double velocity(vex::percentUnits units);
 	};
 
 	class inertial {
@@ -128,7 +135,7 @@ namespace vex {
 
 		bool installed();
 		double angle();
-		void setRotation(double in, vex::rotationUnits type = vex::rotationUnits::deg);
+		void setRotation(double in, vex::rotationUnits type);
 	};
 }
 #endif
