@@ -2,6 +2,7 @@
 
 #include "robotmath.h"
 #include "navigation.h"
+#include "simGraphing.h"
 
 extern simulator::FieldGraph graphBack;
 extern simulator::FieldGraph graphFront;
@@ -68,4 +69,8 @@ void simulation(int t) {
     if (t % 200 < 12) {
         graphBack.plot(trackingBasePos.x, trackingBasePos.y, simulator::colors::BLUE);
     }
+
+    graphFront.clear();
+    std::vector<Point2d> temp = generateCurve(trackingBasePos, Vector2d(24, 24), {Vector2d(12, 36)}, true) || degToRad(90 * t / 1000.0);
+    plot(graphFront, temp);
 }

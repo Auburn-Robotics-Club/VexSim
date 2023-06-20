@@ -168,6 +168,10 @@ void FieldGraph::quiver(double x, double y, double dx, double dy, sf::Color colo
 	drawVector(sf::Vector2f(x * X_PIXELS_INCH, y * Y_PIXELS_INCH), sf::Vector2f(dx * X_PIXELS_INCH, dy * Y_PIXELS_INCH), color);
 }
 
+void FieldGraph::clearPlotBuffer() {
+	plotPointBuffer.clear();
+}
+
 void FieldGraph::plot(double x, double y, sf::Color color) {
 	plotPointBuffer.push_back(sf::Vector2f(x * X_PIXELS_INCH, y * Y_PIXELS_INCH));
 	drawPlot(color);

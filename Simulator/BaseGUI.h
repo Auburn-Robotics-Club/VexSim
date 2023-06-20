@@ -73,6 +73,7 @@ namespace simulator {
 		void clear();
 		void scatter(double x, double y, sf::Color color = colors::BLACK);
 		void quiver(double x, double y, double dx, double dy, sf::Color color = colors::BLACK);
+		void clearPlotBuffer();
 		void plot(double x, double y, sf::Color color = colors::BLACK);
 		void plot(std::vector<double> x, std::vector<double> y, sf::Color color = colors::BLACK);
 		void plot3(std::vector<double> x, std::vector<double> y, std::vector<double> z, sf::Color lowColor = colors::BLUE, sf::Color highColor = colors::RED);

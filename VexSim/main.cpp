@@ -5,11 +5,15 @@
 /*
 TODO
 
--In robotmath define operations for std::vector<Point2d and Vector2d> that allows you to add a Vector, rotate, or scale the entire list
+-Turn into fuller application with menu screen, empty field, current field (includes obsiticles)
 
--Graphing of robotmath compents for sim
+-Pause button for simulation
 
 -Flexible phycics for the edges and obsitcles
+--3 levels, major rectangles cover full elements, mid rectangles conver tighter aspect of large objects, splines of points that make up the object for fine collision detection
+--Has each level detects a collision it gets more detailed and if no collision finer levels get skipped
+--Editor allows you to draw these boundries
+--Allow show boundries with have 3 options for each detail and draw red boundings
 
 -Add noise to GPS/Inertial add sliding to wheels using phycics in given github
 --Constant nosie - Handled nativly by sensor
