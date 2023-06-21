@@ -78,22 +78,31 @@ void FieldGraph::drawScatter(sf::Vector2f pos, sf::Color color) {
 
 void FieldGraph::drawVector(sf::Vector2f pos, sf::Vector2f v, sf::Color color) {
 	//Takes interger vector, use function must convert inputs to pixel ints
-	color = sf::Color::Red;
-
-	const double percentHeight = 0.90;
+	const double percentHeight = 0.5;
 	const double percentWidth = 0.08;
+	const double headWidth = 10;
+	const double headHeight = 10;
 
 	double mag = sqrt(v.x * v.x + v.y * v.y);
 	double s = v.y / mag;
 	double c = v.x / mag;
 
-	sw::Line line(pos, sf::Vector2f(pos.x + v.x * percentHeight, pos.y + v.y * percentHeight), scatterRadius * 0.5, color);
+	sw::Line line;
 	sf::ConvexShape triangle;
 	triangle.setPointCount(3);
 	triangle.setFillColor(color);
-	triangle.setPoint(0, sf::Vector2f(pos.x + v.x * percentHeight - mag * percentWidth * s, pos.y + v.y * percentHeight + mag * percentWidth * c));
-	triangle.setPoint(1, sf::Vector2f(pos.x + v.x, pos.y + v.y));
-	triangle.setPoint(2, sf::Vector2f(pos.x + v.x * percentHeight + mag * percentWidth * s, pos.y + v.y * percentHeight - mag * percentWidth * c));
+	if (mag*(1-percentHeight) < headHeight) {
+		line = sw::Line(pos, sf::Vector2f(pos.x + v.x * percentHeight, pos.y + v.y * percentHeight), scatterRadius * 0.5, color);
+		triangle.setPoint(0, sf::Vector2f(pos.x + v.x * percentHeight - mag * percentWidth * s, pos.y + v.y * percentHeight + mag * percentWidth * c));
+		triangle.setPoint(1, sf::Vector2f(pos.x + v.x, pos.y + v.y));
+		triangle.setPoint(2, sf::Vector2f(pos.x + v.x * percentHeight + mag * percentWidth * s, pos.y + v.y * percentHeight - mag * percentWidth * c));
+	}
+	else {
+		line = sw::Line(pos, sf::Vector2f(pos.x + v.x - headHeight * c, pos.y + v.y - headHeight * s), scatterRadius * 0.5, color);
+		triangle.setPoint(0, sf::Vector2f(pos.x + v.x - headHeight * c - headWidth * s, pos.y + v.y - headHeight * s + headWidth * c));
+		triangle.setPoint(1, sf::Vector2f(pos.x + v.x, pos.y + v.y));
+		triangle.setPoint(2, sf::Vector2f(pos.x + v.x - headHeight * c + headWidth * s, pos.y + v.y - headHeight * s - headWidth * c));
+	}
 
 	texture.draw(line);
 	texture.draw(triangle);

@@ -57,6 +57,9 @@
     <ClCompile Include="..\AUBIE-VEX-Core\src\simGraphing.cpp">
       <Filter>Source Files\VEX-AUBIE-CORE</Filter>
     </ClCompile>
+    <ClCompile Include="..\Simulator\src\controller.cpp">
+      <Filter>Source Files\Simulator</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\Assets\Field2022.png">
@@ -108,6 +111,9 @@
     </ClInclude>
     <ClInclude Include="..\AUBIE-VEX-Core\simGraphing.h">
       <Filter>Header Files\VEX-AUBIE-CORE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Simulator\controller.h">
+      <Filter>Header Files\Simulator</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

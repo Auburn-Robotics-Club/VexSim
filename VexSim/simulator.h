@@ -3,6 +3,7 @@
 #include "robotmath.h"
 #include "navigation.h"
 #include "simGraphing.h"
+#include "controller.h"
 
 extern simulator::FieldGraph graphBack;
 extern simulator::FieldGraph graphFront;
@@ -29,6 +30,7 @@ simulator::TankRobot realRobot = simulator::TankRobot(startPos.currentPosition, 
 TrackingBase<vex::motor, vex::motor, vex::encoder> trackBase
 = TrackingBase<vex::motor, vex::motor, vex::encoder>(&leftM, false, &rightM, false, tankDriveWidth, &inertialSensor, &horE, false);
 
+CXBOXController Controller1(1);
 
 //Pre Setup
 void pre_sim_setup() {
@@ -40,37 +42,61 @@ void pre_sim_setup() {
 
 	trackBase.setGlobalCoefficent(M_2PI * simulator::wheelRadius);
 	trackBase.setHeading(startPos.currentHeading);
+
+    navigation.setStartingPos(startPos);
 }
 
 double accel = 20.0 / 3000;
-Point2d trackingBasePos = startPos.currentPosition;
+int tLast = -10;
 
 void simulation(int t) {
     trackBase.update();
-    trackingBasePos = trackBase.getAbsVector() + trackingBasePos;
+    //Filtering and sensor combination occurs here
+    navigation.shiftCurrentPosition(trackBase.getAbsVector());
+    navigation.setHead(trackBase.getHeading(), false);
+    navigation.updateNavigation((t - tLast) / 1000.0);
+    tLast = t;
 
-    if (t < 5000) {
-        rightM.setVelocity(40 + accel * t, vex::percentUnits::pct);
-        leftM.setVelocity(40 - accel * t, vex::percentUnits::pct);
+    if (t < 2000) {
+        rightM.setVelocity(0, vex::percentUnits::pct);
+        leftM.setVelocity(0, vex::percentUnits::pct);
     }
-    else if (t < 8000) {
-        rightM.setVelocity(40 + accel * 5000, vex::percentUnits::pct);
-        leftM.setVelocity(40 - accel * 5000, vex::percentUnits::pct);
+    else if (t < 4000) {
+        rightM.setVelocity(40, vex::percentUnits::pct);
+        leftM.setVelocity(40, vex::percentUnits::pct);
     }
-    else if (t < 10000) {
-        rightM.setVelocity(100, vex::percentUnits::pct);
-        leftM.setVelocity(100, vex::percentUnits::pct);
+    else if (t < 6000) {
+        rightM.setVelocity(40, vex::percentUnits::pct);
+        leftM.setVelocity(-40, vex::percentUnits::pct);
     }
     else {
-        rightM.setVelocity(-90, vex::percentUnits::pct);
-        leftM.setVelocity(-20, vex::percentUnits::pct);
+        rightM.setVelocity(40, vex::percentUnits::pct);
+        leftM.setVelocity(60, vex::percentUnits::pct);
     }
 
     if (t % 200 < 12) {
-        graphBack.plot(trackingBasePos.x, trackingBasePos.y, simulator::colors::BLUE);
+        plot(graphBack, navigation.getPosition().p, simulator::colors::BLUE);
     }
 
     graphFront.clear();
-    std::vector<Point2d> temp = generateCurve(trackingBasePos, Vector2d(24, 24), {Vector2d(12, 36)}, true) || degToRad(90 * t / 1000.0);
-    plot(graphFront, temp);
+    //quiver(graphFront, navigation.getPosition().p, navigation.getAcceleration(), simulator::colors::GREEN);
+    //quiver(graphFront, navigation.getPosition().p, navigation.getVelocity(), simulator::colors::RED);
 }
+
+/*if (Controller1.IsConnected()) {
+        float normLY = fmaxf(-1, (float)Controller1.GetState().Gamepad.sThumbLY / 32767);
+        normLY = abs(normLY) < 0.05 ? 0 : normLY;
+
+        float normRY = fmaxf(-1, (float)Controller1.GetState().Gamepad.sThumbRY / 32767);
+        normRY = abs(normRY) < 0.05 ? 0 : normRY;
+
+        rightM.setVelocity(normRY*100, vex::percentUnits::pct);
+        leftM.setVelocity(normLY*100, vex::percentUnits::pct);
+    }
+
+    if (t % 200 < 15) {
+        plot(graphBack, navigation.getPosition().p, simulator::colors::BLUE);
+    }
+    if (t % 600 < 15) {
+        quiver(graphFront, navigation.getPosition(), simulator::colors::RED);
+    }*/

@@ -138,4 +138,5 @@ namespace vex {
 		void setRotation(double in, vex::rotationUnits type);
 	};
 }
+
 #endif

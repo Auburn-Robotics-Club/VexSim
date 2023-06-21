@@ -137,6 +137,7 @@
     <ClCompile Include="..\AUBIE-VEX-Core\src\robotmath.cpp" />
     <ClCompile Include="..\AUBIE-VEX-Core\src\simGraphing.cpp" />
     <ClCompile Include="..\Simulator\src\BaseGUI.cpp" />
+    <ClCompile Include="..\Simulator\src\controller.cpp" />
     <ClCompile Include="..\Simulator\src\Line.cpp" />
     <ClCompile Include="..\Simulator\src\v5.cpp" />
     <ClCompile Include="main.cpp" />
@@ -157,6 +158,7 @@
     <ClInclude Include="..\AUBIE-VEX-Core\simGraphing.h" />
     <ClInclude Include="..\Simulator\BaseGUI.h" />
     <ClInclude Include="..\Simulator\Common.hpp" />
+    <ClInclude Include="..\Simulator\controller.h" />
     <ClInclude Include="..\Simulator\Line.hpp" />
     <ClInclude Include="..\Simulator\v5.h" />
     <ClInclude Include="..\Simulator\v5_vcs.h" />
