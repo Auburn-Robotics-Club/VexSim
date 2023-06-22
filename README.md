@@ -38,13 +38,21 @@ Tank Drive Robot configurations
 Controller Support
 
 Vex Motor
+
 Vex Encoders
+
 Vex Inertial Sensor
 
 Graphing (Recommend you read BaseGUI.h under Simulator)
+
 -2 Graphs that overlay the field
+
 -Scatter - paints a dot on the field
+
 -Quiver - draws a vector on the field
+
 -Plot - draws a line between each plotted point
+
 -clearPlotBuffer - Clears the plot buffer starting new line segments
+
 -clear - Clears graph
