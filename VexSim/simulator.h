@@ -1,62 +1,70 @@
 #pragma once
 
-#include "robotmath.h"
-#include "navigation.h"
-#include "simGraphing.h"
-#include "controller.h"
+//Nessacary imports
+#include "v5.h"
+#include "robotmath.h" //Borowed from AUBIE1 Libary planned to be removed
+#include "controller.h" //Borrowed from internet will be intergrated into V5
 
-extern simulator::FieldGraph graphBack;
-extern simulator::FieldGraph graphFront;
+//Import your robot control libaries here
+
+
+//SIMULATION CONFIG
+//--------------------------------------------------------------------------------------------------
+
+//Controller
+CXBOXController Controller1(1);
+
+//Pull in graphing tools from Simulator
+extern simulator::FieldGraph graphBack; //Drawn before robot
+extern simulator::FieldGraph graphFront; //Drawn after robot
 
 //Simulation Setup
 const int WAIT_TIME = 10; //Msec between loops
 
-//Robot Chariteritics
-startingPosition startPos = { Point2d(72, 72), 90, true };
-const double tankDriveWidth = 16; //Inches
-const double robotWidth = 18;
-const double robotLength = 18;
+//Robot Chariteritics - Units of length in inches, units of angles in degrees, + CounterClockwise
+Point2d startPos = Point2d(72, 72);
+double startingHead = 90;
 
-//Sensor setup
+const double tankDriveWidth = 16; //Used for phycics seperation from center of left wheels to center of right wheels
+const double robotWidth = 18; //Used for drawing, size of rendered robot image
+const double robotLength = 18; // ^
+
+//Basic tank drive config
+//Position realitive to center of robot (Right is +X, Up is +Y), Orientation of wheel with respect to robot (Unit vector of 1, 90 deg CCW), wheelRadius
 vex::motor rightM = vex::motor(Vector2d(0.5 * tankDriveWidth, 0), Vector2d(1, 90, true), simulator::wheelRadius);
 vex::motor leftM = vex::motor(Vector2d(-0.5 * tankDriveWidth, 0), Vector2d(1, 90, true), simulator::wheelRadius);
 vex::encoder horE = vex::encoder(Vector2d(tankDriveWidth * 0.25, 0), Vector2d(1, 0, true), simulator::wheelRadius);
-vex::inertial inertialSensor = vex::inertial();
+vex::inertial inertialSensor = vex::inertial(); //Returns heading as measured by the phycics, planned to include noise and drift in the future
 
 //Simulator robot setup
-simulator::TankRobot realRobot = simulator::TankRobot(startPos.currentPosition, startPos.currentHeading, &leftM, &rightM, tankDriveWidth, robotWidth, robotLength);
+simulator::TankRobot realRobot = simulator::TankRobot(startPos, startingHead, &leftM, &rightM, tankDriveWidth, robotWidth, robotLength);
 
-//V5 Robot setup
-TrackingBase<vex::motor, vex::motor, vex::encoder> trackBase
-= TrackingBase<vex::motor, vex::motor, vex::encoder>(&leftM, false, &rightM, false, tankDriveWidth, &inertialSensor, &horE, false);
-
-CXBOXController Controller1(1);
+//SIMULATION
+//--------------------------------------------------------------------------------------------------
 
 //Pre Setup
+//Run once before loop begins
 void pre_sim_setup() {
-	realRobot.add(&horE);
-	realRobot.add(&inertialSensor);
+	realRobot.add(&horE); //Adds horizontal encoder
+	realRobot.add(&inertialSensor); //Adds inertial sensor
+
+    //Initalize your code here
+    //--------------------------------------------------------------------------------------------------
 
 	rightM.setVelocity(0, vex::percentUnits::pct);
 	leftM.setVelocity(0, vex::percentUnits::pct);
 
-	trackBase.setGlobalCoefficent(M_2PI * simulator::wheelRadius);
-	trackBase.setHeading(startPos.currentHeading);
-
-    navigation.setStartingPos(startPos);
 }
 
-double accel = 20.0 / 3000;
-int tLast = -10;
+//Loop run once per WAIT_TIME, t repersents time in msec since start of the loop
+void simulation(int t) {
+
+}
+
+/*
+Trip Around the map example
 
 void simulation(int t) {
-    trackBase.update();
-    //Filtering and sensor combination occurs here
-    navigation.shiftCurrentPosition(trackBase.getAbsVector());
-    navigation.setHead(trackBase.getHeading(), false);
-    navigation.updateNavigation((t - tLast) / 1000.0);
-    tLast = t;
-
     if (t < 2000) {
         rightM.setVelocity(0, vex::percentUnits::pct);
         leftM.setVelocity(0, vex::percentUnits::pct);
@@ -73,17 +81,13 @@ void simulation(int t) {
         rightM.setVelocity(40, vex::percentUnits::pct);
         leftM.setVelocity(60, vex::percentUnits::pct);
     }
-
-    if (t % 200 < 12) {
-        plot(graphBack, navigation.getPosition().p, simulator::colors::BLUE);
-    }
-
-    graphFront.clear();
-    //quiver(graphFront, navigation.getPosition().p, navigation.getAcceleration(), simulator::colors::GREEN);
-    //quiver(graphFront, navigation.getPosition().p, navigation.getVelocity(), simulator::colors::RED);
 }
+*/
+/*
+Controller Example
 
-/*if (Controller1.IsConnected()) {
+void simulation(int t) {
+    if (Controller1.IsConnected()) {
         float normLY = fmaxf(-1, (float)Controller1.GetState().Gamepad.sThumbLY / 32767);
         normLY = abs(normLY) < 0.05 ? 0 : normLY;
 
@@ -93,10 +97,5 @@ void simulation(int t) {
         rightM.setVelocity(normRY*100, vex::percentUnits::pct);
         leftM.setVelocity(normLY*100, vex::percentUnits::pct);
     }
-
-    if (t % 200 < 15) {
-        plot(graphBack, navigation.getPosition().p, simulator::colors::BLUE);
-    }
-    if (t % 600 < 15) {
-        quiver(graphFront, navigation.getPosition(), simulator::colors::RED);
-    }*/
+}
+*/

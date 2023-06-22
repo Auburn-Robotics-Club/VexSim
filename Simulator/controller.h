@@ -1,6 +1,10 @@
 #ifndef _XBOX_CONTROLLER_H_
 #define _XBOX_CONTROLLER_H_
 
+
+//CODE FROM: https://www.codeproject.com/Articles/26949/Xbox-360-Controller-Input-in-C-with-XInput
+
+
 // No MFC
 #define WIN32_LEAN_AND_MEAN
 
