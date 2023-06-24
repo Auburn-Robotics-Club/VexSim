@@ -3,7 +3,9 @@
 //Nessacary imports
 #include "v5.h"
 #include "robotmath.h" //Borowed from AUBIE1 Libary planned to be removed
-#include "controller.h" //Borrowed from internet will be intergrated into V5
+//#include "controller.h" //Borrowed from internet will be intergrated into V5
+#include "navigation.h"
+#include "simGraphing.h"
 
 //Import your robot control libaries here
 
@@ -12,7 +14,7 @@
 //--------------------------------------------------------------------------------------------------
 
 //Controller
-CXBOXController Controller1(1);
+//CXBOXController Controller1(1);
 
 //Pull in graphing tools from Simulator
 extern simulator::FieldGraph graphBack; //Drawn before robot
@@ -39,6 +41,10 @@ vex::inertial inertialSensor = vex::inertial(); //Returns heading as measured by
 //Simulator robot setup
 simulator::TankRobot realRobot = simulator::TankRobot(startPos, startingHead, &leftM, &rightM, tankDriveWidth, robotWidth, robotLength);
 
+
+//Navigation
+TrackingBase<vex::motor, vex::motor, vex::encoder> chassisOdom(&leftM, false, &rightM, false, tankDriveWidth, &inertialSensor, &horE, false);
+
 //SIMULATION
 //--------------------------------------------------------------------------------------------------
 
@@ -54,10 +60,28 @@ void pre_sim_setup() {
 	rightM.setVelocity(0, vex::percentUnits::pct);
 	leftM.setVelocity(0, vex::percentUnits::pct);
 
+    chassisOdom.setGlobalCoefficent(M_2PI * simulator::wheelRadius);
+    chassisOdom.setHeading(startingHead);
+    navigation.setStartingPos(startPos, startingHead, true);
 }
 
 //Loop run once per WAIT_TIME, t repersents time in msec since start of the loop
 void simulation(int t) {
+    chassisOdom.update();
+    navigation.shiftCurrentPosition(chassisOdom.getAbsVector());
+    navigation.setHead(chassisOdom.getHeading(), false);
+    navigation.updateNavigation(WAIT_TIME / 1000.0);
+
+    double r = navigation.currentRadiusOfCurvature();
+
+    graphFront.clear();
+    scatter(graphFront, navigation.getPosition().p);
+    quiver(graphFront, navigation.getPosition().p, navigation.translateLocalToGlobal(Vector2d(-r, 0)), simulator::colors::BLACK);
+    quiver(graphFront, navigation.getPosition().p, navigation.getVelocity(), simulator::colors::RED);
+    quiver(graphFront, navigation.getPosition().p, navigation.getAcceleration(), simulator::colors::GREEN);
+
+    rightM.setVelocity(20.0 * t / 3000, vex::percentUnits::pct);
+    leftM.setVelocity(20.0 * t / 2000, vex::percentUnits::pct);
 
 }
 
