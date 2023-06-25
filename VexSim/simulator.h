@@ -66,19 +66,19 @@ void pre_sim_setup() {
 }
 
 //Loop run once per WAIT_TIME, t repersents time in msec since start of the loop
+
+
 void simulation(int t) {
     chassisOdom.update();
     navigation.shiftCurrentPosition(chassisOdom.getAbsVector());
     navigation.setHead(chassisOdom.getHeading(), false);
     navigation.updateNavigation(WAIT_TIME / 1000.0);
 
-    double r = navigation.currentRadiusOfCurvature();
-
     graphFront.clear();
-    scatter(graphFront, navigation.getPosition().p);
-    quiver(graphFront, navigation.getPosition().p, navigation.translateLocalToGlobal(Vector2d(-r, 0)), simulator::colors::BLACK);
-    quiver(graphFront, navigation.getPosition().p, navigation.getVelocity(), simulator::colors::RED);
-    quiver(graphFront, navigation.getPosition().p, navigation.getAcceleration(), simulator::colors::GREEN);
+    //scatter(graphFront, navigation.getPosition().p);
+    //quiver(graphFront, navigation.getPosition().p, navigation.getVelocity().getRotatedVector(-90, true).getUnitVector().scale(-r), simulator::colors::BLACK);
+    //quiver(graphFront, navigation.getPosition().p, navigation.getVelocity(), simulator::colors::RED);
+    //quiver(graphFront, navigation.getPosition().p, navigation.getAcceleration(), simulator::colors::GREEN);
 
     rightM.setVelocity(20.0 * t / 3000, vex::percentUnits::pct);
     leftM.setVelocity(20.0 * t / 2000, vex::percentUnits::pct);
