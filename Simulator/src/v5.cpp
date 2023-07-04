@@ -31,6 +31,8 @@ void encoder::updateEnc(simulator::RobotBase* robot, double deltaTime) {
 	revolutions += arc / (M_2PI*wheelRadius);
 }
 
+motor::motor(Vector2d offset, Vector2d rotation, double wheelRadiusIn) : encoder(offset, rotation, wheelRadiusIn) {};
+
 void motor::updatePhysics(simulator::RobotBase* robot, double deltaTime) {
 	double delta = setPower - percentPower;
 	if (abs(delta / deltaTime) > simulator::MAX_PCT_ACCEL) {
@@ -74,6 +76,40 @@ double motor::velocity(vex::percentUnits units) {
 
 double motor::getAngularSpeed() {
 	return percentPower* MAX_ANGULAR_SPEED;
+};
+
+motor_group::motor_group() {};
+
+motor_group::motor_group(motor& A) {
+	motors.push_back(&A);
+};
+
+void motor_group::setVelocity(double value, vex::velocityUnits units) {
+	for (motor* m : motors) {
+		m->setVelocity(value, units);
+	}
+};
+
+void motor_group::setVelocity(double value, vex::percentUnits units) {
+	for (motor* m : motors) {
+		m->setVelocity(value, units);
+	}
+};
+
+double motor_group::velocity(vex::velocityUnits units) {
+	double avg = 0;
+	for (motor* m : motors) {
+		avg += m->velocity(units);
+	}
+	return avg / motors.size();
+};
+
+double motor_group::velocity(vex::percentUnits units) {
+	double avg = 0;
+	for (motor* m : motors) {
+		avg += m->velocity(units);
+	}
+	return avg / motors.size();
 };
 
 inertial::inertial() {

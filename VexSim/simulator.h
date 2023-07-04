@@ -6,6 +6,7 @@
 //#include "controller.h" //Borrowed from internet will be intergrated into V5
 #include "navigation.h"
 #include "simGraphing.h"
+#include "robotModels.h"
 
 //Import your robot control libaries here
 
@@ -37,6 +38,8 @@ vex::motor rightM = vex::motor(Vector2d(0.5 * tankDriveWidth, 0), Vector2d(1, 90
 vex::motor leftM = vex::motor(Vector2d(-0.5 * tankDriveWidth, 0), Vector2d(1, 90, true), simulator::wheelRadius);
 vex::encoder horE = vex::encoder(Vector2d(tankDriveWidth * 0.25, 0), Vector2d(1, 0, true), simulator::wheelRadius);
 vex::inertial inertialSensor = vex::inertial(); //Returns heading as measured by the phycics, planned to include noise and drift in the future
+vex::motor_group leftGroup(leftM);
+vex::motor_group rightGroup(rightM);
 
 //Simulator robot setup
 simulator::TankRobot realRobot = simulator::TankRobot(startPos, startingHead, &leftM, &rightM, tankDriveWidth, robotWidth, robotLength);
@@ -44,6 +47,7 @@ simulator::TankRobot realRobot = simulator::TankRobot(startPos, startingHead, &l
 
 //Navigation
 TrackingBase<vex::motor, vex::motor, vex::encoder> chassisOdom(&leftM, false, &rightM, false, tankDriveWidth, &inertialSensor, &horE, false);
+TankDriveType tankbot(&leftGroup, &rightGroup);
 
 //SIMULATION
 //--------------------------------------------------------------------------------------------------
@@ -57,8 +61,8 @@ void pre_sim_setup() {
     //Initalize your code here
     //--------------------------------------------------------------------------------------------------
 
-	rightM.setVelocity(0, vex::percentUnits::pct);
-	leftM.setVelocity(0, vex::percentUnits::pct);
+    tankbot.updateMotors();
+    tankbot.setController(new CVController(Vector2d(0, 50), -20));
 
     chassisOdom.setGlobalCoefficent(M_2PI * simulator::wheelRadius);
     chassisOdom.setHeading(startingHead);
@@ -67,21 +71,39 @@ void pre_sim_setup() {
 
 //Loop run once per WAIT_TIME, t repersents time in msec since start of the loop
 
-
+int i = 0;
 void simulation(int t) {
+    //Hardware Updates / Filtering
     chassisOdom.update();
+    //TODO Implement filtering with predictions in main thread
+    
+    //Navigation Updates
     navigation.shiftCurrentPosition(chassisOdom.getAbsVector());
     navigation.setHead(chassisOdom.getHeading(), false);
     navigation.updateNavigation(WAIT_TIME / 1000.0);
 
-    graphFront.clear();
+    //Motor Updates
+    tankbot.updateMotors();
+
+    //Main
+    if (t % 1000 < 11 || i % 2 == 1) {
+        if (i % 2 == 0) {
+            std::cout << tankbot.predictNextPos(WAIT_TIME / 1000.0) << " | ";
+            quiver(graphBack, tankbot.predictNextPos(WAIT_TIME / 1000.0), simulator::colors::RED, 12);
+        }
+        else {
+            std::cout << navigation.getPosition() << std::endl;
+            quiver(graphFront,navigation.getPosition(), simulator::colors::GREEN, 12);
+        }
+        i++;
+    }
+
+    //Logging
+    //graphFront.clear();
     //scatter(graphFront, navigation.getPosition().p);
     //quiver(graphFront, navigation.getPosition().p, navigation.getVelocity().getRotatedVector(-90, true).getUnitVector().scale(-r), simulator::colors::BLACK);
     //quiver(graphFront, navigation.getPosition().p, navigation.getVelocity(), simulator::colors::RED);
     //quiver(graphFront, navigation.getPosition().p, navigation.getAcceleration(), simulator::colors::GREEN);
-
-    rightM.setVelocity(20.0 * t / 3000, vex::percentUnits::pct);
-    leftM.setVelocity(20.0 * t / 2000, vex::percentUnits::pct);
 
 }
 

@@ -3,6 +3,7 @@
 #include "robotmath.h"
 #include <vector>
 #include <iostream>
+#include <stdarg.h>
 
 namespace simulator {
 	const int cyclesPerMsec = 10;
@@ -13,6 +14,11 @@ namespace simulator {
 }
 
 namespace vex {
+	const enum class directionType {
+		fwd,
+		rev,
+		undefined
+	};
 	const enum class rotationUnits {
 		deg,
 		rev
@@ -115,12 +121,33 @@ namespace vex {
 		void updatePhysics(simulator::RobotBase* robot, double deltaTime);
 		double getAngularSpeed();
 	public:
-		motor(Vector2d offset, Vector2d rotation, double wheelRadiusIn) : encoder(offset, rotation, wheelRadiusIn) {};
+		motor(Vector2d offset, Vector2d rotation, double wheelRadiusIn);
 
 		void setVelocity(double value, vex::velocityUnits units);
 		void setVelocity(double value, vex::percentUnits units);
 		double velocity(vex::velocityUnits units);
 		double velocity(vex::percentUnits units);
+
+		//UNIMPLEMENTED
+		void spin(vex::directionType) {};
+		void stop() {};
+	};
+
+	class motor_group {
+	private:
+		std::vector<motor*> motors;
+
+	public:
+		motor_group();
+		motor_group(motor& A);
+		void setVelocity(double value, vex::velocityUnits units);
+		void setVelocity(double value, vex::percentUnits units);
+		double velocity(vex::velocityUnits units);
+		double velocity(vex::percentUnits units);
+
+		//UNIMPLEMENTED
+		void spin(vex::directionType) {};
+		void stop() {};
 	};
 
 	class inertial {
