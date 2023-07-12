@@ -62,7 +62,7 @@ void pre_sim_setup() {
     //--------------------------------------------------------------------------------------------------
 
     tankbot.updateMotors();
-    tankbot.setController(new CVController(Vector2d(0, 50), -20));
+    tankbot.setController(new CVController(Vector2d(0, 50), 52));
 
     chassisOdom.setGlobalCoefficent(M_2PI * simulator::wheelRadius);
     chassisOdom.setHeading(startingHead);
@@ -72,6 +72,11 @@ void pre_sim_setup() {
 //Loop run once per WAIT_TIME, t repersents time in msec since start of the loop
 
 int i = 0;
+positionSet a;
+positionSet operator - (positionSet A, positionSet B) {
+    return { Point2d(A.p.x - B.p.x, A.p.y - B.p.y), A.head - B.head };
+};
+
 void simulation(int t) {
     //Hardware Updates / Filtering
     chassisOdom.update();
@@ -88,11 +93,12 @@ void simulation(int t) {
     //Main
     if (t % 1000 < 11 || i % 2 == 1) {
         if (i % 2 == 0) {
-            std::cout << tankbot.predictNextPos(WAIT_TIME / 1000.0) << " | ";
-            quiver(graphBack, tankbot.predictNextPos(WAIT_TIME / 1000.0), simulator::colors::RED, 12);
+            a = tankbot.predictNextPos(WAIT_TIME / 1000.0);
+            std::cout << a << " | ";
+            quiver(graphBack, a, simulator::colors::RED, 12);
         }
         else {
-            std::cout << navigation.getPosition() << std::endl;
+            std::cout << navigation.getPosition() << " | " << a - navigation.getPosition() << std::endl;
             quiver(graphFront,navigation.getPosition(), simulator::colors::GREEN, 12);
         }
         i++;
