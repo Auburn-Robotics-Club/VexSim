@@ -9,7 +9,14 @@
 #include "robotModels.h"
 
 //Import your robot control libaries here
-
+namespace simulator {
+    const int cyclesPerMsec = 10;
+    const double timeStep = 0.001 / cyclesPerMsec;
+    const double wheelRadius = 1.625; //Inches
+    const double gearRatio_in_out = (6 / 1) * (3 / 5);
+    const double MAX_SPEED = 3600 * 0.10471975512 * wheelRadius / gearRatio_in_out; //Inches per second = 3600 * 0.10471975512 (*MotorRPM*Rad/RPM*) / totalGear (*motorGear * driveGear*) * wheelRadius
+    const double MAX_PCT_ACCEL = 200.00; //Pct per second
+}
 
 //SIMULATION CONFIG
 //--------------------------------------------------------------------------------------------------
@@ -28,8 +35,8 @@ const int WAIT_TIME = 10; //Msec between loops
 Point2d startPos = Point2d(72, 72);
 double startingHead = 90;
 
-const double tankDriveWidth = 16; //Used for phycics seperation from center of left wheels to center of right wheels
-const double robotWidth = 18; //Used for drawing, size of rendered robot image
+const double tankDriveWidth = 12.125; //Used for phycics seperation from center of left wheels to center of right wheels
+const double robotWidth = 14.625; //Used for drawing, size of rendered robot image
 const double robotLength = 18; // ^
 
 //Basic tank drive config

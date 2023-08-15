@@ -6,12 +6,12 @@
 #include <stdarg.h>
 
 namespace simulator {
-	const int cyclesPerMsec = 10;
-	const double timeStep = 0.001 / cyclesPerMsec;
-	const double wheelRadius = 2; //Inches
-	const double gearRatio_in_out = 18;
-	const double MAX_SPEED = 3600 * 0.10471975512 * wheelRadius  / gearRatio_in_out; //Inches per second = 3600 * 0.10471975512 (*MotorRPM*Rad/RPM*) / totalGear (*motorGear * driveGear*) * wheelRadius
-	const double MAX_PCT_ACCEL = 200.00; //Pct per second
+	extern const int cyclesPerMsec;
+	extern const double timeStep;
+	extern const double wheelRadius;
+	extern const double gearRatio_in_out;
+	extern const double MAX_SPEED;
+	extern const double MAX_PCT_ACCEL;
 }
 
 namespace vex {
