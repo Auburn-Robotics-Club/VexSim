@@ -13,7 +13,7 @@ namespace simulator {
     const int cyclesPerMsec = 10;
     const double timeStep = 0.001 / cyclesPerMsec;
     const double wheelRadius = 1.625; //Inches
-    const double gearRatio_in_out = (6 / 1) * (3 / 5);
+    const double gearRatio_in_out = (6.0 / 1) * (3.0 / 5);
     const double MAX_SPEED = 3600 * 0.10471975512 * wheelRadius / gearRatio_in_out; //Inches per second = 3600 * 0.10471975512 (*MotorRPM*Rad/RPM*) / totalGear (*motorGear * driveGear*) * wheelRadius
     const double MAX_PCT_ACCEL = 200.00; //Pct per second
 }
@@ -54,7 +54,7 @@ simulator::TankRobot realRobot = simulator::TankRobot(startPos, startingHead, &l
 
 //Navigation
 TrackingBase<vex::motor, vex::motor, vex::encoder> chassisOdom(&leftM, false, &rightM, false, tankDriveWidth, &inertialSensor, &horE, false);
-TankDriveType tankbot(&leftGroup, &rightGroup);
+TankDriveType tankbot(&leftGroup, &rightGroup, robotLength, robotWidth, simulator::wheelRadius, tankDriveWidth, simulator::gearRatio_in_out);
 
 //SIMULATION
 //--------------------------------------------------------------------------------------------------
@@ -69,7 +69,7 @@ void pre_sim_setup() {
     //--------------------------------------------------------------------------------------------------
 
     tankbot.updateMotors();
-    tankbot.setController(new CVController(Vector2d(0, 50), 52));
+    tankbot.setController(new CPctController(Vector2d(0, 0), 0));
 
     chassisOdom.setGlobalCoefficent(M_2PI * simulator::wheelRadius);
     chassisOdom.setHeading(startingHead);
@@ -101,11 +101,12 @@ void simulation(int t) {
     if (t % 1000 < 11 || i % 2 == 1) {
         if (i % 2 == 0) {
             a = tankbot.predictNextPos(WAIT_TIME / 1000.0);
-            std::cout << a << " | ";
+            //std::cout << a << " | ";
             quiver(graphBack, a, simulator::colors::RED, 12);
         }
         else {
-            std::cout << navigation.getPosition() << " | " << a - navigation.getPosition() << std::endl;
+            //std::cout << realRobot.getCenter() << std::endl;
+            //std::cout << navigation.getPosition() << " | " << a - navigation.getPosition() << std::endl;
             quiver(graphFront,navigation.getPosition(), simulator::colors::GREEN, 12);
         }
         i++;

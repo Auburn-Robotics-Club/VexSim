@@ -13,7 +13,7 @@ std::ostream& operator << (std::ostream& os, sf::Vector2f v);
 namespace simulator {
 	const int WINDOW_WIDTH = 700;
 	const int WINDOW_HEIGHT = 700;
-	const std::string ASSET_PATH = "D:/Projects/AUBIE VEX/VexSim/Assets/";
+	const std::string ASSET_PATH = "C:/Users/Carson Easterling/Documents/Robotics/VexSim/Assets/";
 
 	namespace colors {
 		const sf::Color RED = sf::Color(255, 0, 0);

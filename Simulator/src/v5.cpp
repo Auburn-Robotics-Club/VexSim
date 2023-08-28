@@ -38,6 +38,7 @@ void motor::updatePhysics(simulator::RobotBase* robot, double deltaTime) {
 	if (abs(delta / deltaTime) > simulator::MAX_PCT_ACCEL) {
 		delta = sign(delta) * simulator::MAX_PCT_ACCEL * deltaTime;
 	}
+
 	percentPower += delta;
 	percentPower = fclamp(percentPower, -1, 1);
 };
@@ -251,5 +252,6 @@ TankRobot::TankRobot(Point2d startPos, double startHeadInDeg, vex::motor* left, 
 void TankRobot::updatePhysics(double deltaTime) {
 	vel = Vector2d(0.5 * (leftMotor->getAngularSpeed() + rightMotor->getAngularSpeed()) * wheelRadius, heading, false);
 	angularVel = (rightMotor->getAngularSpeed() - leftMotor->getAngularSpeed()) * wheelRadius / wheelWidth;
+
 	RobotBase::updatePhysics(deltaTime);
 };
