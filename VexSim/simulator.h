@@ -85,6 +85,27 @@ positionSet operator - (positionSet A, positionSet B) {
 };
 
 void simulation(int t) {
+    if (t < 2000) {
+        rightM.setVelocity(0, vex::percentUnits::pct);
+        leftM.setVelocity(0, vex::percentUnits::pct);
+    }
+    else if (t < 4000) {
+        rightM.setVelocity(40, vex::percentUnits::pct);
+        leftM.setVelocity(40, vex::percentUnits::pct);
+    }
+    else if (t < 6000) {
+        rightM.setVelocity(40, vex::percentUnits::pct);
+        leftM.setVelocity(-40, vex::percentUnits::pct);
+    }
+    else {
+        rightM.setVelocity(40, vex::percentUnits::pct);
+        leftM.setVelocity(60, vex::percentUnits::pct);
+    }
+
+
+
+
+    /*
     //Hardware Updates / Filtering
     chassisOdom.update();
     //TODO Implement filtering with predictions in main thread
@@ -118,7 +139,7 @@ void simulation(int t) {
     //quiver(graphFront, navigation.getPosition().p, navigation.getVelocity().getRotatedVector(-90, true).getUnitVector().scale(-r), simulator::colors::BLACK);
     //quiver(graphFront, navigation.getPosition().p, navigation.getVelocity(), simulator::colors::RED);
     //quiver(graphFront, navigation.getPosition().p, navigation.getAcceleration(), simulator::colors::GREEN);
-
+    /*
 }
 
 /*
