@@ -1,4 +1,4 @@
-#include "Simulator/BaseGUI.h"
+#include "BaseGUI.h"
 #include <chrono>
 #include "simulator.h"
 
