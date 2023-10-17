@@ -32,8 +32,8 @@ extern simulator::FieldGraph graphFront; //Drawn after robot
 const int WAIT_TIME = 10; //Msec between loops
 
 //Robot Chariteritics - Units of length in inches, units of angles in degrees, + CounterClockwise
-Point2d startPos = Point2d(72, 72);
-double startingHead = 90;
+Point2d startPos = Point2d(72, 0);
+double startingHead = 45+90;
 
 const double tankDriveWidth = 12.125; //Used for phycics seperation from center of left wheels to center of right wheels
 const double robotWidth = 14.625; //Used for drawing, size of rendered robot image
@@ -56,6 +56,12 @@ simulator::TankRobot realRobot = simulator::TankRobot(startPos, startingHead, &l
 TrackingBase<vex::motor, vex::motor, vex::encoder> chassisOdom(&leftM, false, &rightM, false, tankDriveWidth, &inertialSensor, &horE, false);
 TankDriveType tankbot(&leftGroup, &rightGroup, robotLength, robotWidth, simulator::wheelRadius, tankDriveWidth, simulator::gearRatio_in_out);
 
+FeedForwardDriveController driveCont = FeedForwardDriveController(2, 4, 4, 2);
+FeedForwardTurnController rotCont = FeedForwardTurnController(2, 2);
+StraightPathController striaghtCont = StraightPathController(&driveCont, &rotCont);
+
+TargetPath p = TargetPath({ Point2d(72, 72), M_PI_2 });
+
 //SIMULATION
 //--------------------------------------------------------------------------------------------------
 
@@ -67,13 +73,17 @@ void pre_sim_setup() {
 
     //Initalize your code here
     //--------------------------------------------------------------------------------------------------
-
-    tankbot.updateMotors(0.001);
-    //tankbot.setController(new CPctController(Vector2d(0, 0), 0));
-
     chassisOdom.setGlobalCoefficent(M_2PI * simulator::wheelRadius);
     chassisOdom.setHeading(startingHead);
     navigation.setStartingPos(startPos, startingHead, true);
+
+    tankbot.updateMotors(0.001);
+
+    p.addRelTarget(Vector2d(-10, 20));
+    p.addTarget(100.0, 72.0);
+    navigation.newTargetList(p);
+
+    tankbot.setController(&striaghtCont);
 }
 
 //Loop run once per WAIT_TIME, t repersents time in msec since start of the loop
@@ -85,11 +95,35 @@ positionSet operator - (positionSet A, positionSet B) {
 };
 
 void simulation(int t) {
-    if (t < 2000) {
+    //Hardware Updates / Filtering
+    chassisOdom.update();
+    //TODO Implement filtering with predictions in main thread
+
+    //Navigation Updates
+    navigation.shiftCurrentPosition(chassisOdom.getAbsVector());
+    navigation.setHead(chassisOdom.getHeading(), false);
+    navigation.updateNavigation(WAIT_TIME / 1000.0);
+
+    graphFront.clear();
+    scatter(graphFront, navigation.getPosition().p);
+    quiver(graphFront, navigation.getPosition(), simulator::colors::GREEN, 12);
+
+    std::vector<positionSet> a = p.getList();
+    scatter(graphBack, a, simulator::colors::RED);
+
+
+    //Motor Updates
+    tankbot.updateMotors(WAIT_TIME / 1000.0);
+}
+
+
+/*
+if (t < 2000) {
         rightM.setVelocity(0, vex::percentUnits::pct);
         leftM.setVelocity(0, vex::percentUnits::pct);
     }
-    else if (t < 4000) {
+    else if (t < 2500) {
+        std::cout << "A" << std::endl;
         rightM.setVelocity(40, vex::percentUnits::pct);
         leftM.setVelocity(40, vex::percentUnits::pct);
     }
@@ -101,9 +135,7 @@ void simulation(int t) {
         rightM.setVelocity(40, vex::percentUnits::pct);
         leftM.setVelocity(60, vex::percentUnits::pct);
     }
-}
-
-
+*/
 
     /*
     //Hardware Updates / Filtering
