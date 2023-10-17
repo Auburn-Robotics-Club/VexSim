@@ -95,6 +95,10 @@ positionSet operator - (positionSet A, positionSet B) {
 };
 
 void simulation(int t) {
+    if (t < 1000) {
+        return;
+    }
+
     //Hardware Updates / Filtering
     chassisOdom.update();
     //TODO Implement filtering with predictions in main thread
