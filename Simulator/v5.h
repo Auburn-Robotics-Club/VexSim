@@ -1,6 +1,6 @@
 #ifndef ROBOT_V5_H
 #define ROBOT_V5_H
-#include "robotmath.h"
+#include "robotmath/robotmath.h"
 #include <vector>
 #include <iostream>
 #include <stdarg.h>
@@ -61,7 +61,7 @@ namespace simulator {
 		~RobotBase();
 
 		Point2d getCenter();
-		void setHeading(double head, bool inDeg = true);
+		void setHeading(double head, bool inDeg);
 		double getHeading();
 		Vector2d getFacingVector();
 		Vector2d getAbsVel();
@@ -163,7 +163,7 @@ namespace vex {
 
 		bool installed();
 		double angle();
-		void setRotation(double in, vex::rotationUnits type);
+		void setHeading(double in, vex::rotationUnits type);
 	};
 }
 

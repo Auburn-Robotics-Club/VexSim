@@ -5,6 +5,7 @@
 #include "Line.hpp"
 #include <sstream>
 
+#pragma message("PROJECTDIR == " PROJECTDIR)
 
 std::ostream& operator << (std::ostream& os, sf::Color c);
 std::ostream& operator << (std::ostream& os, sf::Vector2i v);
@@ -13,7 +14,8 @@ std::ostream& operator << (std::ostream& os, sf::Vector2f v);
 namespace simulator {
 	const int WINDOW_WIDTH = 700;
 	const int WINDOW_HEIGHT = 700;
-	const std::string ASSET_PATH = "C:/Users/Carson Easterling/Documents/Robotics/VexSim/Assets/";
+	const std::string DIRECTORY_PATH = PROJECTDIR;
+	const std::string ASSET_PATH = DIRECTORY_PATH + "../Assets/";
 
 	namespace colors {
 		const sf::Color RED = sf::Color(255, 0, 0);

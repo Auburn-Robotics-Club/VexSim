@@ -129,7 +129,7 @@ double inertial::angle() {
 	return CWAngle;
 }
 
-void inertial::setRotation(double in, vex::rotationUnits type) {
+void inertial::setHeading(double in, vex::rotationUnits type) {
 	if (type == vex::rotationUnits::deg){
 		CWAngle = in;
 	}

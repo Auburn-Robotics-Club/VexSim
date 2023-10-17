@@ -2,7 +2,7 @@
 
 //Nessacary imports
 #include "v5.h"
-#include "robotmath.h" //Borowed from AUBIE1 Libary planned to be removed
+#include "robotmath/robotmath.h" //Borowed from AUBIE1 Libary planned to be removed
 //#include "controller.h" //Borrowed from internet will be intergrated into V5
 #include "navigation.h"
 #include "simGraphing.h"
@@ -68,8 +68,8 @@ void pre_sim_setup() {
     //Initalize your code here
     //--------------------------------------------------------------------------------------------------
 
-    tankbot.updateMotors();
-    tankbot.setController(new CPctController(Vector2d(0, 0), 0));
+    tankbot.updateMotors(0.001);
+    //tankbot.setController(new CPctController(Vector2d(0, 0), 0));
 
     chassisOdom.setGlobalCoefficent(M_2PI * simulator::wheelRadius);
     chassisOdom.setHeading(startingHead);
@@ -101,7 +101,7 @@ void simulation(int t) {
         rightM.setVelocity(40, vex::percentUnits::pct);
         leftM.setVelocity(60, vex::percentUnits::pct);
     }
-
+}
 
 
 

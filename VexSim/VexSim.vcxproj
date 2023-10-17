@@ -106,7 +106,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;PROJECTDIR=R"($(ProjectDir))";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
@@ -134,8 +134,14 @@
   <ItemGroup>
     <ClCompile Include="..\AUBIE-VEX-Core\src\logger.cpp" />
     <ClCompile Include="..\AUBIE-VEX-Core\src\navigation.cpp" />
-    <ClCompile Include="..\AUBIE-VEX-Core\src\robotmath.cpp" />
-    <ClCompile Include="..\AUBIE-VEX-Core\src\simGraphing.cpp" />
+    <ClCompile Include="..\AUBIE-VEX-Core\src\robotmath\base.cpp" />
+    <ClCompile Include="..\AUBIE-VEX-Core\src\robotmath\BasePIDController.cpp" />
+    <ClCompile Include="..\AUBIE-VEX-Core\src\robotmath\EWMAFilter.cpp" />
+    <ClCompile Include="..\AUBIE-VEX-Core\src\robotmath\Path.cpp" />
+    <ClCompile Include="..\AUBIE-VEX-Core\src\robotmath\Point2d.cpp" />
+    <ClCompile Include="..\AUBIE-VEX-Core\src\robotmath\robotmath.cpp" />
+    <ClCompile Include="..\AUBIE-VEX-Core\src\robotmath\SMAFilter.cpp" />
+    <ClCompile Include="..\AUBIE-VEX-Core\src\robotmath\Vector2d.cpp" />
     <ClCompile Include="..\Simulator\src\BaseGUI.cpp" />
     <ClCompile Include="..\Simulator\src\controller.cpp" />
     <ClCompile Include="..\Simulator\src\Line.cpp" />
@@ -153,7 +159,14 @@
     <ClInclude Include="..\AUBIE-VEX-Core\logger.h" />
     <ClInclude Include="..\AUBIE-VEX-Core\navigation.h" />
     <ClInclude Include="..\AUBIE-VEX-Core\quickguide.h" />
-    <ClInclude Include="..\AUBIE-VEX-Core\robotmath.h" />
+    <ClInclude Include="..\AUBIE-VEX-Core\robotmath\base.h" />
+    <ClInclude Include="..\AUBIE-VEX-Core\robotmath\BasePIDController.h" />
+    <ClInclude Include="..\AUBIE-VEX-Core\robotmath\EWMAFilter.h" />
+    <ClInclude Include="..\AUBIE-VEX-Core\robotmath\Path.h" />
+    <ClInclude Include="..\AUBIE-VEX-Core\robotmath\Point2d.h" />
+    <ClInclude Include="..\AUBIE-VEX-Core\robotmath\robotmath.h" />
+    <ClInclude Include="..\AUBIE-VEX-Core\robotmath\SMAFilter.h" />
+    <ClInclude Include="..\AUBIE-VEX-Core\robotmath\Vector2d.h" />
     <ClInclude Include="..\AUBIE-VEX-Core\robotModels.h" />
     <ClInclude Include="..\AUBIE-VEX-Core\simGraphing.h" />
     <ClInclude Include="..\Simulator\BaseGUI.h" />

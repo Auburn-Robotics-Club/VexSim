@@ -28,6 +28,12 @@
     <Filter Include="Resource Files\Assets">
       <UniqueIdentifier>{439926d5-67ab-4829-b900-532ca1696969}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\VEX-AUBIE-CORE\robotmath">
+      <UniqueIdentifier>{89147869-7d66-42ce-8c07-a21c45cdf5e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\VEX-AUBIE-CORE\robotmath">
+      <UniqueIdentifier>{941069ab-b49b-471a-9e2f-1a2e40f3e186}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -35,15 +41,6 @@
     </ClCompile>
     <ClCompile Include="..\Simulator\src\v5.cpp">
       <Filter>Source Files\Simulator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\AUBIE-VEX-Core\src\logger.cpp">
-      <Filter>Source Files\VEX-AUBIE-CORE</Filter>
-    </ClCompile>
-    <ClCompile Include="..\AUBIE-VEX-Core\src\navigation.cpp">
-      <Filter>Source Files\VEX-AUBIE-CORE</Filter>
-    </ClCompile>
-    <ClCompile Include="..\AUBIE-VEX-Core\src\robotmath.cpp">
-      <Filter>Source Files\VEX-AUBIE-CORE</Filter>
     </ClCompile>
     <ClCompile Include="..\Simulator\src\BaseGUI.cpp">
       <Filter>Source Files\Simulator</Filter>
@@ -54,11 +51,38 @@
     <ClCompile Include="simulator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\AUBIE-VEX-Core\src\simGraphing.cpp">
-      <Filter>Source Files\VEX-AUBIE-CORE</Filter>
-    </ClCompile>
     <ClCompile Include="..\Simulator\src\controller.cpp">
       <Filter>Source Files\Simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AUBIE-VEX-Core\src\logger.cpp">
+      <Filter>Source Files\VEX-AUBIE-CORE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AUBIE-VEX-Core\src\navigation.cpp">
+      <Filter>Source Files\VEX-AUBIE-CORE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AUBIE-VEX-Core\src\robotmath\base.cpp">
+      <Filter>Source Files\VEX-AUBIE-CORE\robotmath</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AUBIE-VEX-Core\src\robotmath\BasePIDController.cpp">
+      <Filter>Source Files\VEX-AUBIE-CORE\robotmath</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AUBIE-VEX-Core\src\robotmath\EWMAFilter.cpp">
+      <Filter>Source Files\VEX-AUBIE-CORE\robotmath</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AUBIE-VEX-Core\src\robotmath\Path.cpp">
+      <Filter>Source Files\VEX-AUBIE-CORE\robotmath</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AUBIE-VEX-Core\src\robotmath\Point2d.cpp">
+      <Filter>Source Files\VEX-AUBIE-CORE\robotmath</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AUBIE-VEX-Core\src\robotmath\robotmath.cpp">
+      <Filter>Source Files\VEX-AUBIE-CORE\robotmath</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AUBIE-VEX-Core\src\robotmath\SMAFilter.cpp">
+      <Filter>Source Files\VEX-AUBIE-CORE\robotmath</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AUBIE-VEX-Core\src\robotmath\Vector2d.cpp">
+      <Filter>Source Files\VEX-AUBIE-CORE\robotmath</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -73,24 +97,6 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\AUBIE-VEX-Core\gui.h">
-      <Filter>Header Files\VEX-AUBIE-CORE</Filter>
-    </ClInclude>
-    <ClInclude Include="..\AUBIE-VEX-Core\logger.h">
-      <Filter>Header Files\VEX-AUBIE-CORE</Filter>
-    </ClInclude>
-    <ClInclude Include="..\AUBIE-VEX-Core\navigation.h">
-      <Filter>Header Files\VEX-AUBIE-CORE</Filter>
-    </ClInclude>
-    <ClInclude Include="..\AUBIE-VEX-Core\quickguide.h">
-      <Filter>Header Files\VEX-AUBIE-CORE</Filter>
-    </ClInclude>
-    <ClInclude Include="..\AUBIE-VEX-Core\robotmath.h">
-      <Filter>Header Files\VEX-AUBIE-CORE</Filter>
-    </ClInclude>
-    <ClInclude Include="..\AUBIE-VEX-Core\robotModels.h">
-      <Filter>Header Files\VEX-AUBIE-CORE</Filter>
-    </ClInclude>
     <ClInclude Include="..\Simulator\v5.h">
       <Filter>Header Files\Simulator</Filter>
     </ClInclude>
@@ -109,11 +115,50 @@
     <ClInclude Include="simulator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\Simulator\controller.h">
+      <Filter>Header Files\Simulator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\AUBIE-VEX-Core\gui.h">
+      <Filter>Header Files\VEX-AUBIE-CORE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\AUBIE-VEX-Core\logger.h">
+      <Filter>Header Files\VEX-AUBIE-CORE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\AUBIE-VEX-Core\navigation.h">
+      <Filter>Header Files\VEX-AUBIE-CORE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\AUBIE-VEX-Core\quickguide.h">
+      <Filter>Header Files\VEX-AUBIE-CORE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\AUBIE-VEX-Core\robotModels.h">
+      <Filter>Header Files\VEX-AUBIE-CORE</Filter>
+    </ClInclude>
     <ClInclude Include="..\AUBIE-VEX-Core\simGraphing.h">
       <Filter>Header Files\VEX-AUBIE-CORE</Filter>
     </ClInclude>
-    <ClInclude Include="..\Simulator\controller.h">
-      <Filter>Header Files\Simulator</Filter>
+    <ClInclude Include="..\AUBIE-VEX-Core\robotmath\base.h">
+      <Filter>Header Files\VEX-AUBIE-CORE\robotmath</Filter>
+    </ClInclude>
+    <ClInclude Include="..\AUBIE-VEX-Core\robotmath\BasePIDController.h">
+      <Filter>Header Files\VEX-AUBIE-CORE\robotmath</Filter>
+    </ClInclude>
+    <ClInclude Include="..\AUBIE-VEX-Core\robotmath\EWMAFilter.h">
+      <Filter>Header Files\VEX-AUBIE-CORE\robotmath</Filter>
+    </ClInclude>
+    <ClInclude Include="..\AUBIE-VEX-Core\robotmath\Path.h">
+      <Filter>Header Files\VEX-AUBIE-CORE\robotmath</Filter>
+    </ClInclude>
+    <ClInclude Include="..\AUBIE-VEX-Core\robotmath\Point2d.h">
+      <Filter>Header Files\VEX-AUBIE-CORE\robotmath</Filter>
+    </ClInclude>
+    <ClInclude Include="..\AUBIE-VEX-Core\robotmath\robotmath.h">
+      <Filter>Header Files\VEX-AUBIE-CORE\robotmath</Filter>
+    </ClInclude>
+    <ClInclude Include="..\AUBIE-VEX-Core\robotmath\SMAFilter.h">
+      <Filter>Header Files\VEX-AUBIE-CORE\robotmath</Filter>
+    </ClInclude>
+    <ClInclude Include="..\AUBIE-VEX-Core\robotmath\Vector2d.h">
+      <Filter>Header Files\VEX-AUBIE-CORE\robotmath</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
