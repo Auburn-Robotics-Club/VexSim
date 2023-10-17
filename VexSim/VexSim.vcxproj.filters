@@ -160,5 +160,11 @@
     <ClInclude Include="..\AUBIE-VEX-Core\robotmath\Vector2d.h">
       <Filter>Header Files\VEX-AUBIE-CORE\robotmath</Filter>
     </ClInclude>
+    <ClInclude Include="coreconfig.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="auton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -175,6 +175,8 @@
     <ClInclude Include="..\Simulator\Line.hpp" />
     <ClInclude Include="..\Simulator\v5.h" />
     <ClInclude Include="..\Simulator\v5_vcs.h" />
+    <ClInclude Include="auton.h" />
+    <ClInclude Include="coreconfig.h" />
     <ClInclude Include="simulator.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
