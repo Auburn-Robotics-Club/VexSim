@@ -77,10 +77,19 @@ void pre_sim_setup() {
     chassisOdom.setHeading(startingHead);
     navigation.setStartingPos(startPos, startingHead, true);
 
+    Path curve = generateCurve(Point2d(72, 72), Vector2d(50, 50), Vector2d(0, 50));
+    //curveHeadings(curve); Broke
+
+    p.appendPath(curve);
+    
+    p.addRelTarget(Vector2d(10.0, 10.0));
+    p.addRelTarget(Vector2d(10.0, 10.0));
+    p.addRelTarget(Vector2d(10.0, 10.0));
+    p.addRelTarget(Vector2d(10.0, 10.0));
+
     tankbot.updateMotors(0.001);
 
-    p.addRelTarget(Vector2d(-10, 20));
-    p.addTarget(100.0, 72.0);
+    
     navigation.newTargetList(p);
 
     tankbot.setController(&striaghtCont);
