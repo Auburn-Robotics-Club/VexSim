@@ -59,7 +59,7 @@ TankDriveType tankbot(&leftGroup, &rightGroup, robotLength, robotWidth, simulato
 FeedForwardDriveController driveCont = FeedForwardDriveController(2, 4, 4, 2);
 FeedForwardTurnController rotCont = FeedForwardTurnController(2, 2);
 StraightPathController striaghtCont = StraightPathController(&driveCont, &rotCont);
-CurvePathController curveCont = CurvePathController(&striaghtCont, &rotCont);
+//CurvePathController curveCont = CurvePathController(&striaghtCont, &rotCont);
 
 TargetPath p = TargetPath({ Point2d(72, 72), M_PI_2 });
 
@@ -88,12 +88,7 @@ void pre_sim_setup() {
     p.addRelTarget(Vector2d(10.0, 10.0));
     p.addRelTarget(Vector2d(10.0, 10.0));
 
-    tankbot.updateMotors(0.001);
-
-    
-    navigation.newTargetList(p);
-
-    tankbot.setController(&curveCont);
+    tankbot.motion(&p, &striaghtCont);
 }
 
 //Loop run once per WAIT_TIME, t repersents time in msec since start of the loop
