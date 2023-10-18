@@ -59,6 +59,7 @@ TankDriveType tankbot(&leftGroup, &rightGroup, robotLength, robotWidth, simulato
 FeedForwardDriveController driveCont = FeedForwardDriveController(2, 4, 4, 2);
 FeedForwardTurnController rotCont = FeedForwardTurnController(2, 2);
 StraightPathController striaghtCont = StraightPathController(&driveCont, &rotCont);
+CurvePathController curveCont = CurvePathController(&striaghtCont, &rotCont);
 
 TargetPath p = TargetPath({ Point2d(72, 72), M_PI_2 });
 
@@ -78,7 +79,7 @@ void pre_sim_setup() {
     navigation.setStartingPos(startPos, startingHead, true);
 
     Path curve = generateCurve(Point2d(72, 72), Vector2d(50, 50), Vector2d(0, 50));
-    //curveHeadings(curve); Broke
+    curve.removeFromStart(0); //remove duplicate
 
     p.appendPath(curve);
     
@@ -92,7 +93,7 @@ void pre_sim_setup() {
     
     navigation.newTargetList(p);
 
-    tankbot.setController(&striaghtCont);
+    tankbot.setController(&curveCont);
 }
 
 //Loop run once per WAIT_TIME, t repersents time in msec since start of the loop
@@ -118,11 +119,13 @@ void simulation(int t) {
     navigation.updateNavigation(WAIT_TIME / 1000.0);
 
     graphFront.clear();
-    scatter(graphFront, navigation.getPosition().p);
-    quiver(graphFront, navigation.getPosition(), simulator::colors::GREEN, 12);
+    graphBack.clear();
 
+    //quiver(graphFront, tankbot.predictNextPos(WAIT_TIME / 1000.0), simulator::colors::BLUE, 12);
+    scatter(graphFront, navigation.getPosition().p);
     std::vector<positionSet> a = p.getList();
-    scatter(graphBack, a, simulator::colors::RED);
+    scatter(graphFront, a, simulator::colors::RED);
+    quiver(graphFront, navigation.getPosition(), simulator::colors::GREEN, 12);
 
 
     //Motor Updates
