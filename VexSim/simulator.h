@@ -59,7 +59,7 @@ TankDriveType tankbot(&leftGroup, &rightGroup, robotLength, robotWidth, simulato
 FeedForwardDriveController driveCont = FeedForwardDriveController(2, 4, 4, 2);
 FeedForwardTurnController rotCont = FeedForwardTurnController(2, 2);
 StraightPathController striaghtCont = StraightPathController(&driveCont, &rotCont);
-//CurvePathController curveCont = CurvePathController(&striaghtCont, &rotCont);
+CurvePathController curveCont = CurvePathController(10, 4, 20);
 
 TargetPath p = TargetPath({ Point2d(72, 72), M_PI_2 });
 
@@ -88,7 +88,7 @@ void pre_sim_setup() {
     p.addRelTarget(Vector2d(10.0, 10.0));
     p.addRelTarget(Vector2d(10.0, 10.0));
 
-    tankbot.motion(&p, &striaghtCont);
+    tankbot.motion(&p, &curveCont);
 }
 
 //Loop run once per WAIT_TIME, t repersents time in msec since start of the loop
@@ -121,6 +121,8 @@ void simulation(int t) {
     std::vector<positionSet> a = p.getList();
     scatter(graphFront, a, simulator::colors::RED);
     quiver(graphFront, navigation.getPosition(), simulator::colors::GREEN, 12);
+    a = navigation.getPrevPath()->getList();
+    scatter(graphFront, a, simulator::colors::WHITE);
 
 
     //Motor Updates
