@@ -60,6 +60,7 @@ FeedForwardDriveController driveCont = FeedForwardDriveController(2, 4, 4, 2);
 FeedForwardTurnController rotCont = FeedForwardTurnController(2, 2);
 StraightPathController striaghtCont = StraightPathController(&driveCont, &rotCont);
 CurvePathController curveCont = CurvePathController(10, 4, 20);
+PurePursitController purPursCont = PurePursitController(10, 4, 5);
 
 TargetPath p = TargetPath({ Point2d(72, 72), M_PI_2 });
 
@@ -88,7 +89,7 @@ void pre_sim_setup() {
     p.addRelTarget(Vector2d(10.0, 10.0));
     p.addRelTarget(Vector2d(10.0, 10.0));
 
-    tankbot.motion(&p, &curveCont);
+    tankbot.motion(&p, &purPursCont);
 }
 
 //Loop run once per WAIT_TIME, t repersents time in msec since start of the loop
