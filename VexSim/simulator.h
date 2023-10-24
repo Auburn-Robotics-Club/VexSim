@@ -60,7 +60,7 @@ FeedForwardDriveController driveCont = FeedForwardDriveController(2, 4, 4, 2);
 FeedForwardTurnController rotCont = FeedForwardTurnController(2, 2);
 StraightPathController striaghtCont = StraightPathController(&driveCont, &rotCont);
 CurvePathController curveCont = CurvePathController(10, 4, 20);
-PurePursitController purPursCont = PurePursitController(10, 4, 5);
+PurePursitController purPursCont = PurePursitController(10, 1, 15);
 
 TargetPath p = TargetPath({ Point2d(72, 72), M_PI_2 });
 
@@ -79,7 +79,7 @@ void pre_sim_setup() {
     chassisOdom.setHeading(startingHead);
     navigation.setStartingPos(startPos, startingHead, true);
 
-    Path curve = generateCurve(Point2d(72, 72), Vector2d(50, 50), Vector2d(0, 50));
+    Path curve = generateCurve(Point2d(72, 72), Vector2d(50, 50), Vector2d(0, 50), false, 25);
     curve.removeFromStart(0); //remove duplicate
 
     p.appendPath(curve);
